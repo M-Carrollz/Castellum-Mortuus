@@ -7,6 +7,8 @@ public class PlayerControl : MonoBehaviour
     [Header("Camera Values")]
     public Transform cameraAxis;
     public float camRotationSpeed = 45f;
+    public int rotateMouseButton = 1;
+    public int panMouseButton = 0;
 
     [Header("Move Values")]
     public float speed = 5f;
@@ -56,20 +58,26 @@ public class PlayerControl : MonoBehaviour
 
         currentSpeed = velocity.magnitude;
 
-        // These are temporary camera controls for testing purposes.
-        if(Input.GetKey("q"))
+        // Camera Controls
+
+        // Find mouse Input
+        Vector3 mouseInput = Vector3.zero;
+        mouseInput.x = Input.GetAxis("Mouse X");
+        mouseInput.z = Input.GetAxis("Mouse Y");
+
+        // Rotation
+        if (Input.GetMouseButton(rotateMouseButton))
         {
-            // Rotate cam left
             Vector3 rotation = cameraAxis.eulerAngles;
-            rotation.y += camRotationSpeed * Time.deltaTime;
+            rotation.y += mouseInput.x * camRotationSpeed * Time.deltaTime;
             cameraAxis.eulerAngles = rotation;
         }
-        if (Input.GetKey("e"))
+        // Panning
+        if(Input.GetMouseButton(panMouseButton))
         {
-            // Rotate cam right
-            Vector3 rotation = cameraAxis.eulerAngles;
-            rotation.y -= camRotationSpeed * Time.deltaTime;
-            cameraAxis.eulerAngles = rotation;
+
+            cameraAxis.Translate(-mouseInput, cameraAxis);
+
         }
     }
 
