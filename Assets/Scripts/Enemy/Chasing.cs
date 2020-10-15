@@ -9,13 +9,17 @@ public class Chasing : MonoBehaviour
 
     bool isChasing = false;
 
-    public float waitTime = 3f;
-
-    float waitTimer = 0f;
+    public int targetArriveCount = 0;
+    public int maxArriveCount = 2;
 
     public float stopDistance = 1f;
 
     NavMeshAgent agent;
+
+    private void Awake()
+    {
+        chaseTarget.gameObject.GetComponent<Patrolling>().onArrive += TargetArriveCountUp;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -42,15 +46,16 @@ public class Chasing : MonoBehaviour
                 agent.isStopped = false;
             }
         }
-        else
-        {
-            waitTimer += Time.deltaTime;
-            if (waitTimer > waitTime)
-            {
-                waitTimer = 0f;
-                isChasing = true;
-            }
-        }
+    }
 
+    void TargetArriveCountUp()
+    {
+        targetArriveCount++;
+        if(targetArriveCount == maxArriveCount)
+        {
+            targetArriveCount = 0;
+            isChasing = true;
+            agent.destination = chaseTarget.position;
+        }
     }
 }
