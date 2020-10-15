@@ -13,9 +13,21 @@ public class VEnemyExtra : MonoBehaviour
     public Material unseenMat;
     public Material spottedMat;
 
+    Material[] spotMats;
+    Material[] neutralMats;
+
     private void Awake()
     {
         visioner = visionExample.GetComponent<Vision>();
+
+        spotMats = new Material[cylinder.materials.Length];
+        neutralMats = new Material[cylinder.materials.Length];
+
+        for (int i = 0; i < cylinder.materials.Length; i++)
+        {
+            spotMats[i] = spottedMat;
+            neutralMats[i] = unseenMat;
+        }
     }
 
     // Update is called once per frame
@@ -23,11 +35,11 @@ public class VEnemyExtra : MonoBehaviour
     {
         if(IsSpotted())
         {
-            cylinder.material = spottedMat;
+            cylinder.materials = spotMats;
         }
         else
         {
-            cylinder.material = unseenMat;
+            cylinder.materials = neutralMats;
         }
     }
 
