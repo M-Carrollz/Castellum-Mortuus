@@ -207,4 +207,9 @@ public class Enemy : MonoBehaviour
         agent.isStopped = false;
         Debug.Log("Started");
     }
+
+    public State GetState()
+    {
+        return state;
+    }
 }
