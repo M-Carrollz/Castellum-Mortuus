@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
-    public GameManager gameManager;
+    GameManager gameManager;
 
     [Header("Camera Values")]
     public Transform cameraAxis;
@@ -41,8 +41,8 @@ public class PlayerControl : MonoBehaviour
         velocity = Vector3.zero;
 
         // Find input values
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
 
         // Add input to velocity
         velocity.x += horizontal;
@@ -127,5 +127,10 @@ public class PlayerControl : MonoBehaviour
         }
 
         cameraAxis.position = transform.position;
+    }
+
+    public void SetGameManager(GameManager gameManager)
+    {
+        this.gameManager = gameManager;
     }
 }

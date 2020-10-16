@@ -6,21 +6,18 @@ public class GameManager : MonoBehaviour
 {
     bool isAlerted = false;
 
-    public GameObject[] GO_allEnemies;
-    Enemy[] allEnemies;
+    public Enemy[] allEnemies;
 
     public PlayerControl player;
+
+    public Transform[] allNodePoints;
 
     // Debug
 
 
     private void Awake()
     {
-        allEnemies = new Enemy[GO_allEnemies.Length];
-        for (int i = 0; i < allEnemies.Length; i++)
-        {
-            allEnemies[i] = GO_allEnemies[i].GetComponent<Enemy>();
-        }
+        player.SetGameManager(this);
     }
 
     // Start is called before the first frame update
