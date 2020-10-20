@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
+    GameManager gameManager;
+
     [Header("Camera Values")]
     public Transform cameraAxis;
     public float camRotationSpeed = 45f;
@@ -14,6 +16,9 @@ public class PlayerControl : MonoBehaviour
     Vector3 velocity = Vector3.zero;
     Vector3 heading = Vector3.zero;
     float currentSpeed = 0f;
+
+    [Header("Alerted values")]
+    public float additionalSpeedMultiplier = 1.5f;
 
     public enum MoveSpace
     {
@@ -36,8 +41,8 @@ public class PlayerControl : MonoBehaviour
         velocity = Vector3.zero;
 
         // Find input values
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
 
         // Add input to velocity
         velocity.x += horizontal;
@@ -75,6 +80,11 @@ public class PlayerControl : MonoBehaviour
 
     private void LateUpdate()
     {
+        if(gameManager.IsEnemyAlert())
+        {
+            velocity *= additionalSpeedMultiplier;
+        }
+
         // Update position and rotation based on the indicated transform
         switch(moveSpace)
         {
@@ -115,5 +125,12 @@ public class PlayerControl : MonoBehaviour
                 }
                 break;
         }
+
+        cameraAxis.position = transform.position;
+    }
+
+    public void SetGameManager(GameManager gameManager)
+    {
+        this.gameManager = gameManager;
     }
 }
