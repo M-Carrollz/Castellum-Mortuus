@@ -66,6 +66,7 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Does not take walls into account yet
         if(vision.TargetInside(player.transform))
         {
             // Start chasing player
@@ -120,8 +121,6 @@ public class Enemy : MonoBehaviour
     void ArriveAtPatrolNode()
     {     
         currentNodeIndex++;
-
-        Debug.Log(currentNodeIndex);
 
         if(currentNodeIndex == patrolNodes.Length)
         {
@@ -198,14 +197,11 @@ public class Enemy : MonoBehaviour
 
         // Stop the want to move to agent destination
         agent.isStopped = true;
-
-        Debug.Log("Stopped");
     }
 
     void StartNavigating()
     {
         agent.isStopped = false;
-        Debug.Log("Started");
     }
 
     public State GetState()
