@@ -18,6 +18,12 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         player.SetGameManager(this);
+        GameObject GO_player = player.gameObject;
+        for (int i = 0; i < allEnemies.Length; i++)
+        {
+            allEnemies[i].Init(this, GO_player);
+        }
+
     }
 
     // Start is called before the first frame update

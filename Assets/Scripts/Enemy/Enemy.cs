@@ -6,7 +6,8 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    public GameObject player;
+    GameManager gameManager;
+    GameObject player;
 
     public enum State
     {
@@ -51,6 +52,12 @@ public class Enemy : MonoBehaviour
     public float searchRotateSpeed = 50f;
     public float maxSearchTime = 2f;
     float searchTimer = 0f;
+
+    public void Init(GameManager gameManager, GameObject player)
+    {
+        this.gameManager = gameManager;
+        this.player = player;
+    }
 
     // Start is called before the first frame update
     void Start()
