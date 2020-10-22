@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -73,8 +73,7 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Does not take walls into account yet
-        if(vision.TargetInside(player.transform))
+        if(IsPlayerSpotted())
         {
             // Start chasing player
             SetChaseTarget();
@@ -215,4 +214,14 @@ public class Enemy : MonoBehaviour
     {
         return state;
     }
+
+    bool IsPlayerSpotted()
+    {
+        if(vision.visibleTargets.Count > 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
 }
