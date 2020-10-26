@@ -16,7 +16,8 @@ public class Vision : MonoBehaviour
     public bool showGizmo = false;
     public int noOfCurveSegments = 4;
 
-
+    [Header("Smoothing")]
+    public int rayCastRecursionCount = 5;
     // Update is called once per frame
     void Update()
     {
@@ -27,6 +28,7 @@ public class Vision : MonoBehaviour
     {
         visibleTargets.Clear();
 
+        // Find All target colliders in vision range
         Collider[] targetsInRadius = Physics.OverlapSphere(transform.position, radius, targetMask);
 
         for(int i = 0; i < targetsInRadius.Length; i++)
@@ -73,18 +75,104 @@ public class Vision : MonoBehaviour
 
             Debug.DrawLine(transform.position, leftTangentPoint, Color.yellow);
 
+            // Ray to center of target collider
+            Debug.DrawLine(transform.position, target.position, Color.red);
 
             if (angleToTarget < (angle + thetaDegree))// && angleToTarget > -(angle + thetaDegree))
             {
-                Debug.Log("Angle");
+                // Collider is inside vision angle
+
                 // is inside
                 float targetDistance = targetDifference.magnitude;
-                if (targetDistance < radius)
+                
+                if (targetDistance < radius + playerRadius)
                 {
-                    Debug.Log("Radius");
-                    if(!Physics.Raycast(transform.position, targetDirection, targetDistance, obstacleMask))
+                    // Collider is inside vision radius
+
+                    // Shoot ray to position of target
+                    RaycastHit targetCentreHit;
+
+                    if(!Physics.Raycast(transform.position, targetDirection, out targetCentreHit, targetDistance, obstacleMask))
                     {
                         visibleTargets.Add(target);
+                    }
+                    else
+                    {
+                        // Shoot 2 rays to both tangent points of target's collider
+                        // Right ray
+                        float tangentDistance = Vector3.Distance(transform.position, rightTangentPoint);
+
+                        RaycastHit rightHit;
+
+                        bool noObstaclesRight = !Physics.Raycast(transform.position, rightTangentDirection, out rightHit, tangentDistance, obstacleMask);
+
+                        if(noObstaclesRight)
+                        {
+                            // Hit the target
+                            visibleTargets.Add(target);
+                            return;
+                        }
+
+                        // Left ray
+                        RaycastHit leftHit;
+
+                        bool noObstaclesLeft = !Physics.Raycast(transform.position, leftTangentDirection, out leftHit, tangentDistance, obstacleMask);
+
+                        if (noObstaclesLeft)
+                        {
+                            // Hit the target
+                            visibleTargets.Add(target);
+                            return;
+                        }
+
+                        if(rightHit.collider == leftHit.collider)
+                        {
+                            // hit the same obstacle. eg player is fully covered behind one wall
+
+                        }
+                        else
+                        {
+                            // player is covered behind two different obstacles, and there might be a gap
+                            //
+                            // Find which side is the obstacle that is
+                            bool isRight = targetCentreHit.collider == rightHit.collider;
+
+                            float minAngle = 0;
+                            float maxAngle = thetaDegree;
+                            if(isRight)
+                            {
+                                maxAngle *= -1;
+                            }
+
+                            Vector3 currentDirection = targetDirection;
+
+                            for(int j = 0; j < rayCastRecursionCount; j++)
+                            {
+                                float currentAngle = (maxAngle - minAngle) / 2;
+                                currentDirection = Quaternion.AngleAxis(currentAngle, Vector3.up) * currentDirection;
+
+                                Debug.DrawLine(transform.position, transform.position + (currentDirection * tangentDistance), Color.blue);
+
+                                RaycastHit currentHit;
+                                bool noObstacle = !Physics.Raycast(transform.position, currentDirection, out currentHit, tangentDistance, obstacleMask);
+                                if(noObstacle)
+                                {
+                                    // Hit the target
+                                    visibleTargets.Add(target);
+                                    return;
+                                }
+                                else if(currentHit.collider == targetCentreHit.collider)
+                                {
+                                    // Collider is the same obstacle as centre raycast
+                                    minAngle = currentAngle;
+                                }
+                                else
+                                {
+                                    // Collider is different to obstacle in centre raycast
+                                    maxAngle = currentAngle;
+                                }
+                            }
+                        }
                     }
                 }
             }
