@@ -17,7 +17,7 @@ public class Vision : MonoBehaviour
     public int noOfCurveSegments = 4;
 
     [Header("Smoothing")]
-    public int rayCastRecursionCount = 5;
+    public int rayCastCount = 5;
     // Update is called once per frame
     void Update()
     {
@@ -134,22 +134,29 @@ public class Vision : MonoBehaviour
                         {
                             // player is covered behind two different obstacles, and there might be a gap
                             //
-                            // Find which side is the obstacle that is
+                            // Find which side is the obstacle that the target is mostly behind
                             bool isRight = targetCentreHit.collider == rightHit.collider;
 
                             float minAngle = 0;
                             float maxAngle = thetaDegree;
-                            if(isRight)
-                            {
-                                maxAngle *= -1;
-                            }
 
-                            Vector3 currentDirection = targetDirection;
-
-                            for(int j = 0; j < rayCastRecursionCount; j++)
+                            for (int j = 0; j < rayCastCount; j++)
                             {
-                                float currentAngle = (maxAngle - minAngle) / 2;
-                                currentDirection = Quaternion.AngleAxis(currentAngle, Vector3.up) * currentDirection;
+                                float currentAngle = ((maxAngle - minAngle) / 2) + minAngle;
+
+                                Vector3 currentDirection;
+
+                                //if the target is mostly right the rays need to shoot to the left to find the edge of the obstacle collider
+                                if (isRight)
+                                {
+                                    // shoot left
+                                    currentDirection = Quaternion.AngleAxis(-currentAngle, Vector3.up) * targetDirection;
+                                }
+                                else
+                                {
+                                    // shoot right
+                                    currentDirection = Quaternion.AngleAxis(currentAngle, Vector3.up) * targetDirection;
+                                }
 
                                 Debug.DrawLine(transform.position, transform.position + (currentDirection * tangentDistance), Color.blue);
 
