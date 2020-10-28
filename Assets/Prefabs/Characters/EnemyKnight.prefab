@@ -76,7 +76,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   visibleTargets: []
-  showGizmo: 0
+  showGizmo: 1
   noOfCurveSegments: 4
   showRaycasts: 0
   rayCastCount: 5
