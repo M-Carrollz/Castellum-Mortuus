@@ -69,8 +69,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 5
   angle: 45
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 256
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 512
+  visibleTargets: []
   showGizmo: 0
   noOfCurveSegments: 4
+  showRaycasts: 0
+  rayCastCount: 5
 --- !u!195 &608218355062658192
 NavMeshAgent:
   m_ObjectHideFlags: 0
