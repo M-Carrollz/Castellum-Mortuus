@@ -13,12 +13,16 @@ public class PlayerControl : MonoBehaviour
     [Header("Move Values")]
     public float speed = 5f;
     public float roationSpeed = 15f;
+    public float collisionSpeedReduction = 0.5f;
     Vector3 velocity = Vector3.zero;
     Vector3 heading = Vector3.zero;
     float currentSpeed = 0f;
 
     [Header("Alerted values")]
     public float additionalSpeedMultiplier = 1.5f;
+
+    SphereCollider playerCollider;
+    LayerMask obstacleMask;
 
     public enum MoveSpace
     {
@@ -27,6 +31,12 @@ public class PlayerControl : MonoBehaviour
         player
     }
     public MoveSpace moveSpace = MoveSpace.camera;
+
+    private void Awake()
+    {
+        playerCollider = GetComponent<SphereCollider>();
+        obstacleMask = LayerMask.GetMask("Obstacle");
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -54,6 +64,24 @@ public class PlayerControl : MonoBehaviour
         if(velocity.magnitude > 0)
         {
             heading = velocity;
+            switch(moveSpace)
+            {
+                case MoveSpace.global:
+                    {
+                        //heading = heading;
+                    }
+                    break;
+                case MoveSpace.camera:
+                    {
+                        heading = Quaternion.Euler(cameraAxis.transform.rotation.eulerAngles) * heading;
+                    }
+                    break;
+                case MoveSpace.player:
+                    {
+                        heading = Quaternion.Euler(transform.rotation.eulerAngles) * heading;
+                    }
+                    break;
+            }
         }
 
         // Calculate velocity. There is no acceleration so velocity is simply scaled to the speed value.
@@ -80,13 +108,82 @@ public class PlayerControl : MonoBehaviour
 
     private void LateUpdate()
     {
+        if(currentSpeed == 0)
+        {
+            return;
+        }
+        float sphereCastDistance = speed;
         if(gameManager.IsEnemyAlert())
         {
             velocity *= additionalSpeedMultiplier;
+            sphereCastDistance += additionalSpeedMultiplier;
+        }
+
+        sphereCastDistance *= Time.deltaTime;
+
+        RaycastHit hit;
+        bool hitObstacle = Physics.SphereCast(transform.position, playerCollider.radius, heading, out hit, sphereCastDistance, obstacleMask);
+
+        if (hitObstacle)
+        {
+            //transform.position = hit.point;
+
+            float hitDistance = hit.distance;
+            Vector3 hitDirection = hit.point - transform.position;
+            hitDirection = hitDirection.normalized;
+            if (hitDistance > playerCollider.radius)
+            {
+                transform.position += hitDirection * (hitDistance - playerCollider.radius);
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(heading), roationSpeed * Time.deltaTime);
+            }
+
+            // Shoot new cast in perpindicular direction
+            Vector3 secondDirection = Vector3.zero;
+            secondDirection.x = hitDirection.z;
+            secondDirection.y = hitDirection.y;
+            secondDirection.z = -hitDirection.x;
+
+            Vector3.Normalize(secondDirection);
+
+            float dotProd = Vector3.Dot(heading, hitDirection);
+            float perpDot = Vector3.Dot(heading, secondDirection);
+
+            if(dotProd >= 0.999)
+            {
+                // heading is equal to hit direction
+                cameraAxis.position = transform.position;
+                return;
+            }
+
+            if(perpDot < 0)
+            {
+                // heading is counterClockwise
+                secondDirection = -secondDirection;
+            }
+            else
+            {
+                // heading is clockwise
+            }
+
+            RaycastHit secondHit;
+            bool secondHitObstacle = Physics.SphereCast(transform.position, playerCollider.radius, secondDirection, out secondHit, 1 - dotProd, obstacleMask);
+
+            if(secondHitObstacle)
+            {
+                // hit another wall
+            }
+            else
+            {
+                transform.position += secondDirection * (currentSpeed * collisionSpeedReduction) * Time.deltaTime;
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(heading), roationSpeed * Time.deltaTime);
+            }
+
+            cameraAxis.position = transform.position;
+            return;
         }
 
         // Update position and rotation based on the indicated transform
-        switch(moveSpace)
+        switch (moveSpace)
         {
             case MoveSpace.global:
 
@@ -96,8 +193,8 @@ public class PlayerControl : MonoBehaviour
                 if (currentSpeed > 0)
                 {
                     // Rotate player towards heading with no transform reference
-                    Vector3 targetRotation = heading;
-                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(targetRotation), roationSpeed * Time.deltaTime);
+                    //Vector3 targetRotation = heading;
+                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(heading), roationSpeed * Time.deltaTime);
                 }
                 break;
             case MoveSpace.camera:
@@ -108,8 +205,8 @@ public class PlayerControl : MonoBehaviour
                 // Rotate player towards heading based on the cameraAxis transform
                 if (currentSpeed > 0)
                 {
-                    Vector3 targetRotation = Quaternion.Euler(cameraAxis.transform.rotation.eulerAngles) * heading;
-                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(targetRotation), roationSpeed * Time.deltaTime);
+                    //Vector3 targetRotation = Quaternion.Euler(cameraAxis.transform.rotation.eulerAngles) * heading;
+                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(heading), roationSpeed * Time.deltaTime);
                 }
                 break;
             case MoveSpace.player:
@@ -120,8 +217,8 @@ public class PlayerControl : MonoBehaviour
                 // Rotate player towards heading based on this transform
                 if (currentSpeed > 0)
                 {
-                    Vector3 targetRotation = Quaternion.Euler(transform.rotation.eulerAngles) * heading;
-                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(targetRotation), roationSpeed * Time.deltaTime);
+                    //Vector3 targetRotation = Quaternion.Euler(transform.rotation.eulerAngles) * heading;
+                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(heading), roationSpeed * Time.deltaTime);
                 }
                 break;
         }
