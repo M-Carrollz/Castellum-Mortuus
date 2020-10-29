@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +12,12 @@ public class GameManager : MonoBehaviour
     public PlayerControl player;
 
     public Transform[] allNodePoints;
+
+    public GameObject goalTrigger;
+
+    public UnityEvent winEvent;
+
+    public UnityEvent lossEvent;
 
     // Debug
 
@@ -24,6 +31,7 @@ public class GameManager : MonoBehaviour
             allEnemies[i].Init(this, GO_player);
         }
 
+        goalTrigger.GetComponent<GoalTrigger>().SetGameManager(this);
     }
 
     // Start is called before the first frame update
@@ -50,5 +58,17 @@ public class GameManager : MonoBehaviour
     public bool IsEnemyAlert()
     {
         return isAlerted;
+    }
+
+    public void PlayerLose()
+    {
+        // player lose related things go here.
+        lossEvent.Invoke();
+    }
+
+    public void PlayerWin()
+    {
+        // player win related things go here
+        winEvent.Invoke();
     }
 }
