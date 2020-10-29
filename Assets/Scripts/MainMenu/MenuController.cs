@@ -4,14 +4,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class MenuController : MonoBehaviour
 {
- 
-
     public GameObject[] panels;
 
     // Start is called before the first frame update
     void Start()
     {
-        ChangeToPanelIndex(0);
+        //ChangeToPanelIndex(0);
     }
 
     // Update is called once per frame
@@ -44,6 +42,14 @@ public class MenuController : MonoBehaviour
                 panels[i].SetActive(false);
             }
 
+        }
+    }
+
+    public void TurnOffAllPanels()
+    {
+        for (int i = 0; i < panels.Length; i++)
+        {
+            panels[i].SetActive(false);
         }
     }
 }

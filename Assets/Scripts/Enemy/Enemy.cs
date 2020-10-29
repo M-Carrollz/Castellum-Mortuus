@@ -8,6 +8,8 @@ public class Enemy : MonoBehaviour
 {
     GameManager gameManager;
     GameObject player;
+    SphereCollider playerCollider;
+    SphereCollider enemyTrigger;
 
     public enum State
     {
@@ -62,6 +64,9 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerCollider = player.GetComponent<SphereCollider>();
+        enemyTrigger = GetComponent<SphereCollider>();
+
         agent = GetComponent<NavMeshAgent>();
         agent.destination = patrolNodes[0].position;
 
@@ -108,6 +113,14 @@ public class Enemy : MonoBehaviour
                 // return to patrol path
                 ReturnToPatrol();
                 break;
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if(IsPlayerInside())
+        {
+            gameManager.PlayerLose();
         }
     }
 
@@ -224,4 +237,9 @@ public class Enemy : MonoBehaviour
         return false;
     }
 
+    private bool IsPlayerInside()
+    {
+        Vector3 difference = player.transform.position - enemyTrigger.ClosestPoint(player.transform.position);
+        return (difference.magnitude < playerCollider.radius);
+    }
 }
