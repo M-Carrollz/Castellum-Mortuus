@@ -5,10 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Test_Peter/MainMenu_Peter.unity
     guid: f9bed67b244e9984c83423b9e03e3bc6
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Test_Peter/testScene_peter.unity
     guid: 4d11170a8234cd44baee3d50ea4f438c
+  - enabled: 1
+    path: Assets/Scenes/Test_Michael/Greybox_Battlements_Michael_001.unity
+    guid: e9ca7590da2b75849867c7c64ecf4d89
   m_configObjects: {}
