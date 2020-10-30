@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3300444891634314875}
   - component: {fileID: 2998202391127503852}
   - component: {fileID: 608218355062658192}
+  - component: {fileID: 2566633609144514501}
   m_Layer: 0
   m_Name: EnemyKnight
   m_TagString: Enemy
@@ -55,6 +56,7 @@ MonoBehaviour:
   additionalRotationSpeed: 45
   searchRotateSpeed: 50
   maxSearchTime: 2
+  rotationSpeed: 100
 --- !u!114 &2998202391127503852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102,6 +104,19 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!135 &2566633609144514501
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3839344892128350671}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1930319275059508116
 PrefabInstance:
   m_ObjectHideFlags: 0

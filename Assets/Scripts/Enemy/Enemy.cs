@@ -17,7 +17,8 @@ public class Enemy : MonoBehaviour
         patrolling,
         chasing,
         searching,
-        returning
+        returning,
+        turning
     }
 
     public State state = State.patrolling;
@@ -55,6 +56,16 @@ public class Enemy : MonoBehaviour
     public float maxSearchTime = 2f;
     float searchTimer = 0f;
 
+    //Turning variables
+    [Header("Rotation values")]
+    public float rotationSpeed = 15;
+
+    
+    Vector3 targetRotation = Vector3.zero;
+    Vector3 targetNodeDirection = Vector3.zero;
+    Vector3 targetNodeDirectionPerp = Vector3.zero;
+   
+
     public void Init(GameManager gameManager, GameObject player)
     {
         this.gameManager = gameManager;
@@ -73,6 +84,10 @@ public class Enemy : MonoBehaviour
         vision = GetComponent<Vision>();
 
         defaultSpeed = agent.speed;
+
+        //magic number to offset from the floating navmesh
+        agent.baseOffset = -0.08333214f; 
+       
     }
 
     // Update is called once per frame
@@ -93,9 +108,34 @@ public class Enemy : MonoBehaviour
                 {
                     waitTimer = 0f;
                     // Time is over
+                    StartTurning();
+             
+                }
+                break;
+            case State.turning:
+                //find direction to turn towards
+                float scalarDirection = 1;     
+                //perp is short for perpendicular. 
+                float perpDot = (Vector3.Dot(transform.forward, targetNodeDirectionPerp)); 
+                if (perpDot > 0)
+                {
+                    scalarDirection = -1;
+                }
+
+                //Assigning the rotation to this transform rotation
+                Vector3 currentRotation = transform.rotation.eulerAngles;             
+                currentRotation.y += Time.deltaTime * rotationSpeed * scalarDirection;
+                transform.rotation = Quaternion.Euler(currentRotation);
+                
+                //float read = Vector3.Dot(transform.forward, targetNodeDirection); 
+                
+                //check if facing in the right direction
+                if (Vector3.Dot(transform.forward, targetNodeDirection) > 0.999)
+                {
                     state = State.patrolling;
                     StartNavigating();
                 }
+              
                 break;
             case State.patrolling :
                 // patrol stuff
@@ -113,6 +153,7 @@ public class Enemy : MonoBehaviour
                 // return to patrol path
                 ReturnToPatrol();
                 break;
+
         }
     }
 
@@ -241,5 +282,19 @@ public class Enemy : MonoBehaviour
     {
         Vector3 difference = player.transform.position - enemyTrigger.ClosestPoint(player.transform.position);
         return (difference.magnitude < playerCollider.radius);
+    }
+
+    void StartTurning()
+    {
+        
+        
+        targetNodeDirection = patrolNodes[currentNodeIndex].transform.position - transform.position;
+        targetNodeDirection.Normalize();
+        
+        targetNodeDirectionPerp.x = targetNodeDirection.z;
+        targetNodeDirectionPerp.z = -targetNodeDirection.x;
+        
+        state = State.turning;
+        targetRotation.y = Vector3.Angle(transform.forward, targetNodeDirection);
     }
 }
