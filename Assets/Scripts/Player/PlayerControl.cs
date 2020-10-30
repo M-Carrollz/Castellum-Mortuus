@@ -116,7 +116,8 @@ public class PlayerControl : MonoBehaviour
         if(gameManager.IsEnemyAlert())
         {
             velocity *= additionalSpeedMultiplier;
-            sphereCastDistance += additionalSpeedMultiplier;
+            currentSpeed *= additionalSpeedMultiplier;
+            sphereCastDistance *= additionalSpeedMultiplier;
         }
 
         sphereCastDistance *= Time.deltaTime;
@@ -130,6 +131,7 @@ public class PlayerControl : MonoBehaviour
 
             float hitDistance = hit.distance;
             Vector3 hitDirection = hit.point - transform.position;
+            hitDirection.y = transform.position.y;
             hitDirection = hitDirection.normalized;
             if (hitDistance > playerCollider.radius)
             {
@@ -140,7 +142,7 @@ public class PlayerControl : MonoBehaviour
             // Shoot new cast in perpindicular direction
             Vector3 secondDirection = Vector3.zero;
             secondDirection.x = hitDirection.z;
-            secondDirection.y = hitDirection.y;
+            secondDirection.y = transform.position.y;
             secondDirection.z = -hitDirection.x;
 
             Vector3.Normalize(secondDirection);
