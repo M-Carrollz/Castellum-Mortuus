@@ -118,7 +118,7 @@ public class Enemy : MonoBehaviour
 
     private void LateUpdate()
     {
-        if(IsPlayerInside())
+        if(gameManager.gameState == GameManager.GameState.running && IsPlayerInside())
         {
             gameManager.PlayerLose();
         }
