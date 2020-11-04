@@ -32,6 +32,9 @@ public class PlayerControl : MonoBehaviour
     }
     public MoveSpace moveSpace = MoveSpace.camera;
 
+    [Header("Gizmos")]
+    public bool showGizmo = false;
+
     private void Awake()
     {
         playerCollider = GetComponent<SphereCollider>();
@@ -233,5 +236,33 @@ public class PlayerControl : MonoBehaviour
     public void SetGameManager(GameManager gameManager)
     {
         this.gameManager = gameManager;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Color boxColour = Color.clear;
+        Color wireColour = Color.clear;
+
+        if(showGizmo)
+        {
+            boxColour = new Color(1, 0, 0, 0.4f);
+            wireColour = Color.red;
+        }
+
+        Vector3 drawVector = this.transform.lossyScale;
+        drawVector.x *= 1.2f;
+        drawVector.y *= 1.8f;
+        drawVector.z *= 1.2f;
+
+        Vector3 drawPos = this.transform.position;// + boxTrigger.center;
+        drawPos.y += 0.9f;
+
+        Gizmos.matrix = Matrix4x4.TRS(drawPos, this.transform.rotation, drawVector);
+
+        Gizmos.color = boxColour;
+        Gizmos.DrawCube(Vector3.zero, Vector3.one);
+
+        Gizmos.color = wireColour;
+        Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
     }
 }

@@ -55,6 +55,9 @@ public class Enemy : MonoBehaviour
     public float maxSearchTime = 2f;
     float searchTimer = 0f;
 
+    [Header("Gizmos")]
+    public bool showGizmo = false;
+
     public void Init(GameManager gameManager, GameObject player)
     {
         this.gameManager = gameManager;
@@ -241,5 +244,33 @@ public class Enemy : MonoBehaviour
     {
         Vector3 difference = player.transform.position - enemyTrigger.ClosestPoint(player.transform.position);
         return (difference.magnitude < playerCollider.radius);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Color boxColour = Color.clear;
+        Color wireColour = Color.clear;
+
+        if (showGizmo)
+        {
+            boxColour = new Color(1, 0, 0, 0.4f);
+            wireColour = Color.red;
+        }
+
+        Vector3 drawVector = this.transform.lossyScale;
+        drawVector.x *= 1.5f;
+        drawVector.y *= 2.8f;
+        drawVector.z *= 1.2f;
+
+        Vector3 drawPos = this.transform.position;// + boxTrigger.center;
+        drawPos.y += 1.4f;
+
+        Gizmos.matrix = Matrix4x4.TRS(drawPos, this.transform.rotation, drawVector);
+
+        Gizmos.color = boxColour;
+        Gizmos.DrawCube(Vector3.zero, Vector3.one);
+
+        Gizmos.color = wireColour;
+        Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
     }
 }
