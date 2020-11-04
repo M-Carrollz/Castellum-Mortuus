@@ -104,9 +104,11 @@ public class PlayerControl : MonoBehaviour
             rotation.y -= camRotationSpeed * Time.deltaTime;
             cameraAxis.eulerAngles = rotation;
         }
+
+        LateUpdateish();
     }
 
-    private void LateUpdate()
+    private void LateUpdateish()
     {
         if(currentSpeed == 0)
         {
