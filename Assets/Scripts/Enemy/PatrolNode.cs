@@ -8,6 +8,8 @@ public class PatrolNode : MonoBehaviour
 
     public bool showConnections = false;
 
+    public Color color = Color.blue;
+
     public void DebugDrawConnections(Color colour)
     {
         foreach(Transform otherNode in connections)
@@ -18,10 +20,10 @@ public class PatrolNode : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = new Color(0, 0, 1, 0.4f);
+        Gizmos.color = new Color(color.r, color.g, color.b, color.a * 0.4f);
         Gizmos.DrawSphere(transform.position, 0.5f);
 
-        Gizmos.color = Color.blue;
+        Gizmos.color = color;
         Gizmos.DrawWireSphere(transform.position, 0.5f);
 
         if(showConnections)
