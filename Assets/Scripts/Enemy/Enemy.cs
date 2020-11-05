@@ -30,6 +30,11 @@ public class Enemy : MonoBehaviour
     // Patrol variables
 
     [Header("Patrol values")]
+    
+    // LinearPath values
+    public bool pathIsLinear = false;
+    int incrementValue = 1;
+
     public Transform[] patrolNodes;
     int currentNodeIndex = 0;
 
@@ -68,6 +73,7 @@ public class Enemy : MonoBehaviour
 
     [Header("Gizmos")]
     public bool showGizmo = false;
+    public bool showPath = false;
 
     public void Init(GameManager gameManager, GameObject player)
     {
@@ -182,12 +188,24 @@ public class Enemy : MonoBehaviour
     }
 
     void ArriveAtPatrolNode()
-    {     
-        currentNodeIndex++;
-
-        if(currentNodeIndex == patrolNodes.Length)
+    {
+        if(!pathIsLinear)
         {
-            currentNodeIndex = 0;
+            currentNodeIndex++;
+
+            if (currentNodeIndex == patrolNodes.Length)
+            {
+                currentNodeIndex = 0;
+            }
+        }
+        else
+        {
+            currentNodeIndex += incrementValue;
+
+            if(currentNodeIndex == patrolNodes.Length - 1 || currentNodeIndex == 0)
+            {
+                incrementValue = -incrementValue;
+            }
         }
 
         agent.destination = patrolNodes[currentNodeIndex].position;
@@ -327,5 +345,23 @@ public class Enemy : MonoBehaviour
 
         Gizmos.color = wireColour;
         Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
+
+        if(!showPath)
+        {
+            return;
+        }
+
+        Gizmos.color = Color.red;
+        Gizmos.matrix = Matrix4x4.identity;
+        for (int i = 0; i < patrolNodes.Length - 1; i++)
+        {
+            Gizmos.DrawLine(patrolNodes[i].position, patrolNodes[i + 1].position);
+        }
+
+        if(!pathIsLinear)
+        {
+            // Path is not linear
+            Gizmos.DrawLine(patrolNodes[patrolNodes.Length - 1].position, patrolNodes[0].position);
+        }
     }
 }
