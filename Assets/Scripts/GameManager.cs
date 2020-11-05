@@ -5,15 +5,17 @@ using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
+    public bool showNodeConncetions = false;
+
     public MenuController panelManager;
 
     bool isAlerted = false;
 
-    public Enemy[] allEnemies;
+    Enemy[] allEnemies;
 
     public PlayerControl player;
 
-    public Transform[] allNodePoints;
+    PatrolNode[] allNodePoints;
 
     public GameObject goalTrigger;
 
@@ -44,10 +46,15 @@ public class GameManager : MonoBehaviour
 
         player.SetGameManager(this);
         GameObject GO_player = player.gameObject;
+
+        allEnemies = FindObjectsOfType<Enemy>();
+        
         for (int i = 0; i < allEnemies.Length; i++)
         {
             allEnemies[i].Init(this, GO_player);
         }
+
+        allNodePoints = FindObjectsOfType<PatrolNode>();
 
         goalTrigger.GetComponent<GoalTrigger>().SetGameManager(this);
     }
@@ -140,6 +147,19 @@ public class GameManager : MonoBehaviour
             default:
                 // no other game state should change the state to running
                 break;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if(showNodeConncetions)
+        {
+            PatrolNode[] allNodePoints = FindObjectsOfType<PatrolNode>();
+
+            foreach(PatrolNode node in allNodePoints)
+            {
+                node.DebugDrawConnections(Color.green);
+            }
         }
     }
 }
