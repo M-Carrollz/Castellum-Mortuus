@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -17,7 +18,8 @@ public class Enemy : MonoBehaviour
         patrolling,
         chasing,
         searching,
-        returning
+        returning,
+        turning
     }
 
     public State state = State.patrolling;
@@ -26,10 +28,33 @@ public class Enemy : MonoBehaviour
 
     Vision vision;
 
+    [System.Serializable]
+    public struct NodeInfo
+    {
+        [System.Serializable]
+        public struct LookAndTime
+        {
+            public float directionAngle;
+            [HideInInspector]
+            public Vector3 direction;
+            public float time;
+            public bool noNewLookDirection;
+        }
+
+        public PatrolNode patrolNode;
+        public LookAndTime[] lookDirection;
+    }
+
     // Patrol variables
 
     [Header("Patrol values")]
-    public Transform[] patrolNodes;
+    
+    // LinearPath values
+    public bool pathIsLinear = false;
+    int incrementValue = 1;
+
+    public NodeInfo[] patrolNodes;
+    Transform[] patrolNodeTransforms;
     int currentNodeIndex = 0;
 
     public float maxWaitTime = 2f;
@@ -55,6 +80,20 @@ public class Enemy : MonoBehaviour
     public float maxSearchTime = 2f;
     float searchTimer = 0f;
 
+    //Turning variables
+    [Header("Rotation values")]
+    public float rotationSpeed = 15;
+
+    
+    Vector3 targetRotation = Vector3.zero;
+    Vector3 targetNodeDirection = Vector3.zero;
+    Vector3 targetNodeDirectionPerp = Vector3.zero;
+   
+
+    [Header("Gizmos")]
+    public bool showGizmo = false;
+    public bool showPath = false;
+
     public void Init(GameManager gameManager, GameObject player)
     {
         this.gameManager = gameManager;
@@ -67,12 +106,30 @@ public class Enemy : MonoBehaviour
         playerCollider = player.GetComponent<SphereCollider>();
         enemyTrigger = GetComponent<SphereCollider>();
 
+        patrolNodeTransforms = new Transform[patrolNodes.Length];
+
+        for(int i = 0; i < patrolNodes.Length; i++)
+        {
+            for(int j = 0; j < patrolNodes[i].lookDirection.Length; j++)
+            {
+                // Create a global direction based on the specified angle
+                patrolNodes[i].lookDirection[j].direction = Quaternion.AngleAxis(patrolNodes[i].lookDirection[j].directionAngle, Vector3.up) * Vector3.forward;
+            }
+
+            // Assign the transforms
+            patrolNodeTransforms[i] = patrolNodes[i].patrolNode.transform;
+        }
+
         agent = GetComponent<NavMeshAgent>();
-        agent.destination = patrolNodes[0].position;
+        agent.destination = patrolNodeTransforms[0].position;
 
         vision = GetComponent<Vision>();
 
         defaultSpeed = agent.speed;
+
+        //magic number to offset from the floating navmesh
+        agent.baseOffset = -0.08333214f; 
+       
     }
 
     // Update is called once per frame
@@ -93,9 +150,34 @@ public class Enemy : MonoBehaviour
                 {
                     waitTimer = 0f;
                     // Time is over
+                    StartTurning();
+             
+                }
+                break;
+            case State.turning:
+                //find direction to turn towards
+                float scalarDirection = 1;     
+                //perp is short for perpendicular. 
+                float perpDot = (Vector3.Dot(transform.forward, targetNodeDirectionPerp)); 
+                if (perpDot > 0)
+                {
+                    scalarDirection = -1;
+                }
+
+                //Assigning the rotation to this transform rotation
+                Vector3 currentRotation = transform.rotation.eulerAngles;             
+                currentRotation.y += Time.deltaTime * rotationSpeed * scalarDirection;
+                transform.rotation = Quaternion.Euler(currentRotation);
+                
+                //float read = Vector3.Dot(transform.forward, targetNodeDirection); 
+                
+                //check if facing in the right direction
+                if (Vector3.Dot(transform.forward, targetNodeDirection) > 0.999)
+                {
                     state = State.patrolling;
                     StartNavigating();
                 }
+              
                 break;
             case State.patrolling :
                 // patrol stuff
@@ -113,12 +195,13 @@ public class Enemy : MonoBehaviour
                 // return to patrol path
                 ReturnToPatrol();
                 break;
+
         }
     }
 
     private void LateUpdate()
     {
-        if(IsPlayerInside())
+        if(gameManager.gameState == GameManager.GameState.running && IsPlayerInside())
         {
             gameManager.PlayerLose();
         }
@@ -138,15 +221,27 @@ public class Enemy : MonoBehaviour
     }
 
     void ArriveAtPatrolNode()
-    {     
-        currentNodeIndex++;
-
-        if(currentNodeIndex == patrolNodes.Length)
+    {
+        if(!pathIsLinear)
         {
-            currentNodeIndex = 0;
+            currentNodeIndex++;
+
+            if (currentNodeIndex == patrolNodeTransforms.Length)
+            {
+                currentNodeIndex = 0;
+            }
+        }
+        else
+        {
+            currentNodeIndex += incrementValue;
+
+            if(currentNodeIndex == patrolNodeTransforms.Length - 1 || currentNodeIndex == 0)
+            {
+                incrementValue = -incrementValue;
+            }
         }
 
-        agent.destination = patrolNodes[currentNodeIndex].position;
+        agent.destination = patrolNodeTransforms[currentNodeIndex].position;
 
         StopNavigating();
         state = State.waiting;
@@ -198,7 +293,7 @@ public class Enemy : MonoBehaviour
     void ReturnToPatrol()
     {
         // set destination once
-        agent.destination = patrolNodes[currentNodeIndex].position;
+        agent.destination = patrolNodeTransforms[currentNodeIndex].position;
 
         state = State.patrolling;
         StartNavigating();
@@ -241,5 +336,65 @@ public class Enemy : MonoBehaviour
     {
         Vector3 difference = player.transform.position - enemyTrigger.ClosestPoint(player.transform.position);
         return (difference.magnitude < playerCollider.radius);
+    }
+
+    void StartTurning()
+    {
+        
+        
+        targetNodeDirection = patrolNodeTransforms[currentNodeIndex].transform.position - transform.position;
+        targetNodeDirection.Normalize();
+        
+        targetNodeDirectionPerp.x = targetNodeDirection.z;
+        targetNodeDirectionPerp.z = -targetNodeDirection.x;
+        
+        state = State.turning;
+        targetRotation.y = Vector3.Angle(transform.forward, targetNodeDirection);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Color boxColour = Color.clear;
+        Color wireColour = Color.clear;
+
+        if (showGizmo)
+        {
+            boxColour = new Color(1, 0, 0, 0.4f);
+            wireColour = Color.red;
+        }
+
+        Vector3 drawVector = this.transform.lossyScale;
+        drawVector.x *= 1.5f;
+        drawVector.y *= 2.8f;
+        drawVector.z *= 1.2f;
+
+        Vector3 drawPos = this.transform.position;// + boxTrigger.center;
+        drawPos.y += 1.4f;
+
+        Gizmos.matrix = Matrix4x4.TRS(drawPos, this.transform.rotation, drawVector);
+
+        Gizmos.color = boxColour;
+        Gizmos.DrawCube(Vector3.zero, Vector3.one);
+
+        Gizmos.color = wireColour;
+        Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
+
+        if(!showPath)
+        {
+            return;
+        }
+
+        Gizmos.color = Color.red;
+        Gizmos.matrix = Matrix4x4.identity;
+        for (int i = 0; i < patrolNodeTransforms.Length - 1; i++)
+        {
+            Gizmos.DrawLine(patrolNodeTransforms[i].position, patrolNodeTransforms[i + 1].position);
+        }
+
+        if(!pathIsLinear)
+        {
+            // Path is not linear
+            Gizmos.DrawLine(patrolNodeTransforms[patrolNodeTransforms.Length - 1].position, patrolNodeTransforms[0].position);
+        }
     }
 }

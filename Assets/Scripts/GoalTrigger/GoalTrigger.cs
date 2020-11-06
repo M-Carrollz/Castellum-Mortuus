@@ -20,7 +20,7 @@ public class GoalTrigger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(IsPlayerInside())
+        if(gameManager.gameState == GameManager.GameState.running && IsPlayerInside())
         {
             gameManager.PlayerWin();
         }
