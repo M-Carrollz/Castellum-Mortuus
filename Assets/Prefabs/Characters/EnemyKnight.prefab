@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4511543190201746252}
-  - component: {fileID: 3300444891634314875}
+  - component: {fileID: 4270568776319557725}
   - component: {fileID: 2998202391127503852}
   - component: {fileID: 608218355062658192}
   - component: {fileID: 1442150611335953340}
@@ -36,7 +36,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3300444891634314875
+--- !u!114 &4270568776319557725
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 1
+  pathIsLinear: 0
   patrolNodes: []
   maxWaitTime: 2
   arriveDistance: 0.5
@@ -59,6 +60,7 @@ MonoBehaviour:
   maxSearchTime: 2
   rotationSpeed: 100
   showGizmo: 0
+  showPath: 0
 --- !u!114 &2998202391127503852
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -27,6 +28,21 @@ public class Enemy : MonoBehaviour
 
     Vision vision;
 
+    [System.Serializable]
+    public struct NodeInfo
+    {
+        [System.Serializable]
+        public struct LookAndTime
+        {
+            public Vector3 direction;
+            public float time;
+            public bool noNewLookDirection;
+        }
+
+        public PatrolNode patrolNode;
+        public LookAndTime[] lookDirection;
+    }
+
     // Patrol variables
 
     [Header("Patrol values")]
@@ -35,7 +51,8 @@ public class Enemy : MonoBehaviour
     public bool pathIsLinear = false;
     int incrementValue = 1;
 
-    public Transform[] patrolNodes;
+    public NodeInfo[] patrolNodes;
+    Transform[] patrolNodeTransforms;
     int currentNodeIndex = 0;
 
     public float maxWaitTime = 2f;
@@ -87,8 +104,15 @@ public class Enemy : MonoBehaviour
         playerCollider = player.GetComponent<SphereCollider>();
         enemyTrigger = GetComponent<SphereCollider>();
 
+        patrolNodeTransforms = new Transform[patrolNodes.Length];
+
+        for(int i = 0; i < patrolNodes.Length; i++)
+        {
+            patrolNodeTransforms[i] = patrolNodes[i].patrolNode.transform;
+        }
+
         agent = GetComponent<NavMeshAgent>();
-        agent.destination = patrolNodes[0].position;
+        agent.destination = patrolNodeTransforms[0].position;
 
         vision = GetComponent<Vision>();
 
@@ -193,7 +217,7 @@ public class Enemy : MonoBehaviour
         {
             currentNodeIndex++;
 
-            if (currentNodeIndex == patrolNodes.Length)
+            if (currentNodeIndex == patrolNodeTransforms.Length)
             {
                 currentNodeIndex = 0;
             }
@@ -202,13 +226,13 @@ public class Enemy : MonoBehaviour
         {
             currentNodeIndex += incrementValue;
 
-            if(currentNodeIndex == patrolNodes.Length - 1 || currentNodeIndex == 0)
+            if(currentNodeIndex == patrolNodeTransforms.Length - 1 || currentNodeIndex == 0)
             {
                 incrementValue = -incrementValue;
             }
         }
 
-        agent.destination = patrolNodes[currentNodeIndex].position;
+        agent.destination = patrolNodeTransforms[currentNodeIndex].position;
 
         StopNavigating();
         state = State.waiting;
@@ -260,7 +284,7 @@ public class Enemy : MonoBehaviour
     void ReturnToPatrol()
     {
         // set destination once
-        agent.destination = patrolNodes[currentNodeIndex].position;
+        agent.destination = patrolNodeTransforms[currentNodeIndex].position;
 
         state = State.patrolling;
         StartNavigating();
@@ -309,7 +333,7 @@ public class Enemy : MonoBehaviour
     {
         
         
-        targetNodeDirection = patrolNodes[currentNodeIndex].transform.position - transform.position;
+        targetNodeDirection = patrolNodeTransforms[currentNodeIndex].transform.position - transform.position;
         targetNodeDirection.Normalize();
         
         targetNodeDirectionPerp.x = targetNodeDirection.z;
@@ -353,15 +377,15 @@ public class Enemy : MonoBehaviour
 
         Gizmos.color = Color.red;
         Gizmos.matrix = Matrix4x4.identity;
-        for (int i = 0; i < patrolNodes.Length - 1; i++)
+        for (int i = 0; i < patrolNodeTransforms.Length - 1; i++)
         {
-            Gizmos.DrawLine(patrolNodes[i].position, patrolNodes[i + 1].position);
+            Gizmos.DrawLine(patrolNodeTransforms[i].position, patrolNodeTransforms[i + 1].position);
         }
 
         if(!pathIsLinear)
         {
             // Path is not linear
-            Gizmos.DrawLine(patrolNodes[patrolNodes.Length - 1].position, patrolNodes[0].position);
+            Gizmos.DrawLine(patrolNodeTransforms[patrolNodeTransforms.Length - 1].position, patrolNodeTransforms[0].position);
         }
     }
 }
