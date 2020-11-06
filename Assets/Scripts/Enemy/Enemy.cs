@@ -34,6 +34,8 @@ public class Enemy : MonoBehaviour
         [System.Serializable]
         public struct LookAndTime
         {
+            public float directionAngle;
+            [HideInInspector]
             public Vector3 direction;
             public float time;
             public bool noNewLookDirection;
@@ -108,6 +110,13 @@ public class Enemy : MonoBehaviour
 
         for(int i = 0; i < patrolNodes.Length; i++)
         {
+            for(int j = 0; j < patrolNodes[i].lookDirection.Length; j++)
+            {
+                // Create a global direction based on the specified angle
+                patrolNodes[i].lookDirection[j].direction = Quaternion.AngleAxis(patrolNodes[i].lookDirection[j].directionAngle, Vector3.up) * Vector3.forward;
+            }
+
+            // Assign the transforms
             patrolNodeTransforms[i] = patrolNodes[i].patrolNode.transform;
         }
 
