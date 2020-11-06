@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
 {
     GameManager gameManager;
     GameObject player;
+    PlayerControl playerControl;
     SphereCollider playerCollider;
     SphereCollider enemyTrigger;
 
@@ -65,6 +66,7 @@ public class Enemy : MonoBehaviour
     // Chase variables
 
     Vector3 lastKnownLocation = Vector3.zero;
+    Vector3 lastKnownHeading = Vector3.zero;
 
     float defaultSpeed = 3.5f;
 
@@ -79,6 +81,9 @@ public class Enemy : MonoBehaviour
     public float searchRotateSpeed = 50f;
     public float maxSearchTime = 2f;
     float searchTimer = 0f;
+
+    public PatrolNode lastTraversedNode = null;
+    public float traversalRadius = 5f;
 
     //Turning variables
     [Header("Rotation values")]
@@ -98,6 +103,7 @@ public class Enemy : MonoBehaviour
     {
         this.gameManager = gameManager;
         this.player = player;
+        playerControl = player.GetComponent<PlayerControl>();
     }
 
     // Start is called before the first frame update
@@ -122,6 +128,7 @@ public class Enemy : MonoBehaviour
 
         agent = GetComponent<NavMeshAgent>();
         agent.destination = patrolNodeTransforms[0].position;
+        lastTraversedNode = patrolNodes[0].patrolNode;
 
         vision = GetComponent<Vision>();
 
@@ -135,7 +142,10 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(IsPlayerSpotted())
+        // update lastTraversed node
+        FindClosestNodeInRadius(traversalRadius);
+
+        if (IsPlayerSpotted())
         {
             // Start chasing player
             SetChaseTarget();
@@ -263,13 +273,67 @@ public class Enemy : MonoBehaviour
     {
         // Start searching
         state = State.searching;
-        StopNavigating();
         agent.speed = defaultSpeed;
+        searchTimer = 0f;
+
+        //StopNavigating();
+
+        // Lost sight of player
+        // Check last players heading with direction to last traversed node's connections
+
+        if (lastTraversedNode.connections.Length > 0)
+        {
+            Vector3 directionToSearch = (lastTraversedNode.connections[0].position - transform.position).normalized;
+
+            int closestDirIndex = 0;
+            float highestDot = Vector3.Dot(directionToSearch, lastKnownHeading);
+            for (int i = 1; i < lastTraversedNode.connections.Length; i++)
+            {
+                Vector3 connectDir = (lastTraversedNode.connections[i].position - transform.position).normalized;
+
+                float dotProd = Vector3.Dot(connectDir, lastKnownHeading);
+
+                if (dotProd > highestDot)
+                {
+                    closestDirIndex = i;
+                    highestDot = dotProd;
+                    directionToSearch = connectDir;
+                }
+            }
+
+            // Check if connection is going the opposite way to the player heading
+            if(highestDot > 0)
+            {
+                // player's heading is in a positive direction to the connection
+                agent.destination = lastTraversedNode.connections[closestDirIndex].position;
+            }
+            else
+            {
+                // player heading is negative to the connection
+                RaycastHit hit;
+                Vector3 positionAdjusted = transform.position;
+                positionAdjusted.y = 0;
+
+                directionToSearch = lastKnownHeading;
+
+                bool hitObstacle = Physics.Raycast(positionAdjusted, directionToSearch, out hit, 5f, vision.obstacleMask);
+
+                if(!hitObstacle)
+                {
+                    agent.destination = transform.position + (directionToSearch * 5f);
+                }
+                else
+                {
+                    agent.destination = hit.point;
+                }
+            }
+        }
     }
 
     void SetChaseTarget()
     {
         lastKnownLocation = player.transform.position;
+        lastKnownHeading = playerControl.heading;
         StartNavigating();
         state = State.chasing;
         agent.destination = lastKnownLocation;
@@ -287,7 +351,58 @@ public class Enemy : MonoBehaviour
             StopMoving();
         }
 
-        transform.Rotate(Vector3.up * searchRotateSpeed * Time.deltaTime);
+        // Search behaviours
+
+        // if can see point of interest node
+        // start following those directions
+
+        // Find distance to destination
+        float remain = agent.remainingDistance;
+
+        // If Arrived at destination
+        if (remain < arriveDistance)
+        {
+            // Arrive at node
+            ArriveAtSearchPoint();
+        }
+
+
+        //transform.Rotate(Vector3.up * searchRotateSpeed * Time.deltaTime);
+    }
+
+    void ArriveAtSearchPoint()
+    {
+        // Find new search point
+
+        // if following Point of Interest node
+
+        // if wandering around
+    }
+
+    void FindClosestNodeInRadius(float traversalRadius)
+    {
+        Collider[] nodesInRadius = Physics.OverlapSphere(transform.position, traversalRadius, gameManager.nodeMask);
+
+        if (nodesInRadius.Length == 0)
+        {
+            // haven't seen a node
+        }
+        else
+        {
+            int closestNodeIndex = 0;
+            float shortestDistance = Vector3.Distance(transform.position, nodesInRadius[0].transform.position);
+            for (int i = 1; i < nodesInRadius.Length; i++)
+            {
+                float currentDistance = Vector3.Distance(transform.position, nodesInRadius[i].transform.position);
+                if (shortestDistance > currentDistance)
+                {
+                    closestNodeIndex = i;
+                    shortestDistance = currentDistance;
+                }
+            }
+
+            lastTraversedNode = nodesInRadius[closestNodeIndex].gameObject.GetComponent<PatrolNode>();
+        }
     }
 
     void ReturnToPatrol()
