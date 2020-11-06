@@ -32,6 +32,9 @@ public class PlayerControl : MonoBehaviour
     }
     public MoveSpace moveSpace = MoveSpace.camera;
 
+    [Header("Gizmos")]
+    public bool showGizmo = false;
+
     private void Awake()
     {
         playerCollider = GetComponent<SphereCollider>();
@@ -104,9 +107,11 @@ public class PlayerControl : MonoBehaviour
             rotation.y -= camRotationSpeed * Time.deltaTime;
             cameraAxis.eulerAngles = rotation;
         }
+
+        LateUpdateish();
     }
 
-    private void LateUpdate()
+    private void LateUpdateish()
     {
         if(currentSpeed == 0)
         {
@@ -116,7 +121,8 @@ public class PlayerControl : MonoBehaviour
         if(gameManager.IsEnemyAlert())
         {
             velocity *= additionalSpeedMultiplier;
-            sphereCastDistance += additionalSpeedMultiplier;
+            currentSpeed *= additionalSpeedMultiplier;
+            sphereCastDistance *= additionalSpeedMultiplier;
         }
 
         sphereCastDistance *= Time.deltaTime;
@@ -130,6 +136,7 @@ public class PlayerControl : MonoBehaviour
 
             float hitDistance = hit.distance;
             Vector3 hitDirection = hit.point - transform.position;
+            hitDirection.y = transform.position.y;
             hitDirection = hitDirection.normalized;
             if (hitDistance > playerCollider.radius)
             {
@@ -140,7 +147,7 @@ public class PlayerControl : MonoBehaviour
             // Shoot new cast in perpindicular direction
             Vector3 secondDirection = Vector3.zero;
             secondDirection.x = hitDirection.z;
-            secondDirection.y = hitDirection.y;
+            secondDirection.y = transform.position.y;
             secondDirection.z = -hitDirection.x;
 
             Vector3.Normalize(secondDirection);
@@ -229,5 +236,33 @@ public class PlayerControl : MonoBehaviour
     public void SetGameManager(GameManager gameManager)
     {
         this.gameManager = gameManager;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Color boxColour = Color.clear;
+        Color wireColour = Color.clear;
+
+        if(showGizmo)
+        {
+            boxColour = new Color(1, 0, 0, 0.4f);
+            wireColour = Color.red;
+        }
+
+        Vector3 drawVector = this.transform.lossyScale;
+        drawVector.x *= 1.2f;
+        drawVector.y *= 1.8f;
+        drawVector.z *= 1.2f;
+
+        Vector3 drawPos = this.transform.position;// + boxTrigger.center;
+        drawPos.y += 0.9f;
+
+        Gizmos.matrix = Matrix4x4.TRS(drawPos, this.transform.rotation, drawVector);
+
+        Gizmos.color = boxColour;
+        Gizmos.DrawCube(Vector3.zero, Vector3.one);
+
+        Gizmos.color = wireColour;
+        Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
     }
 }
