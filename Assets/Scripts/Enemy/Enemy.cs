@@ -20,10 +20,11 @@ public class Enemy : MonoBehaviour
         chasing,
         searching,
         returning,
-        turning
+        turning,
+        exitNode
     }
 
-    public State state = State.patrolling;
+    State state = State.patrolling;
     
     NavMeshAgent agent;
 
@@ -58,8 +59,12 @@ public class Enemy : MonoBehaviour
     Transform[] patrolNodeTransforms;
     int currentNodeIndex = 0;
 
-    public float maxWaitTime = 2f;
+    public float exitNodeWaitTime = 2f;
     float waitTimer = 0f;
+
+    int currentLookDirectionIndex = 0;
+    float currentNodeMaxTime = 2f;
+    float currentNodeTimer = 0f;
 
     public float arriveDistance = 0.5f;
 
@@ -90,14 +95,14 @@ public class Enemy : MonoBehaviour
     public float rotationSpeed = 15;
 
     
-    Vector3 targetRotation = Vector3.zero;
-    Vector3 targetNodeDirection = Vector3.zero;
-    Vector3 targetNodeDirectionPerp = Vector3.zero;
+    Vector3 targetRotationDirection = Vector3.zero;
+    Vector3 targetRotationDirectionPerp = Vector3.zero;
    
 
     [Header("Gizmos")]
     public bool showGizmo = false;
     public bool showPath = false;
+    public bool showNodeLookAngles = false;
 
     public void Init(GameManager gameManager, GameObject player)
     {
@@ -135,7 +140,7 @@ public class Enemy : MonoBehaviour
         defaultSpeed = agent.speed;
 
         //magic number to offset from the floating navmesh
-        agent.baseOffset = -0.08333214f; 
+        //agent.baseOffset = -0.08333214f; 
        
     }
 
@@ -155,39 +160,14 @@ public class Enemy : MonoBehaviour
         {
             case State.waiting:
                 // wait stuff
-                waitTimer += Time.deltaTime;
-                if (waitTimer > maxWaitTime)
-                {
-                    waitTimer = 0f;
-                    // Time is over
-                    StartTurning();
-             
-                }
+                //WaitAtPatrolNode();
+                NodeTimer();
                 break;
             case State.turning:
-                //find direction to turn towards
-                float scalarDirection = 1;     
-                //perp is short for perpendicular. 
-                float perpDot = (Vector3.Dot(transform.forward, targetNodeDirectionPerp)); 
-                if (perpDot > 0)
-                {
-                    scalarDirection = -1;
-                }
-
-                //Assigning the rotation to this transform rotation
-                Vector3 currentRotation = transform.rotation.eulerAngles;             
-                currentRotation.y += Time.deltaTime * rotationSpeed * scalarDirection;
-                transform.rotation = Quaternion.Euler(currentRotation);
-                
-                //float read = Vector3.Dot(transform.forward, targetNodeDirection); 
-                
-                //check if facing in the right direction
-                if (Vector3.Dot(transform.forward, targetNodeDirection) > 0.999)
-                {
-                    state = State.patrolling;
-                    StartNavigating();
-                }
-              
+                Turning();
+                break;
+            case State.exitNode:
+                ExitNode();
                 break;
             case State.patrolling :
                 // patrol stuff
@@ -230,9 +210,35 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    void StartPatrol()
+    {
+        agent.destination = patrolNodeTransforms[currentNodeIndex].position;
+        state = State.patrolling;
+        StartNavigating();
+    }
+
     void ArriveAtPatrolNode()
     {
-        if(!pathIsLinear)
+        //IncrementCurrentNodeIndex();
+
+        //agent.destination = patrolNodeTransforms[currentNodeIndex].position;
+
+        StopNavigating();
+        state = State.waiting;
+
+        if(patrolNodes[currentNodeIndex].lookDirection.Length > 0)
+        {
+            currentNodeMaxTime = patrolNodes[currentNodeIndex].lookDirection[currentLookDirectionIndex].time;
+        }
+        else
+        {
+            currentNodeMaxTime = exitNodeWaitTime;
+        }
+    }
+
+    void IncrementCurrentNodeIndex()
+    {
+        if (!pathIsLinear)
         {
             currentNodeIndex++;
 
@@ -245,16 +251,11 @@ public class Enemy : MonoBehaviour
         {
             currentNodeIndex += incrementValue;
 
-            if(currentNodeIndex == patrolNodeTransforms.Length - 1 || currentNodeIndex == 0)
+            if (currentNodeIndex == patrolNodeTransforms.Length - 1 || currentNodeIndex == 0)
             {
                 incrementValue = -incrementValue;
             }
         }
-
-        agent.destination = patrolNodeTransforms[currentNodeIndex].position;
-
-        StopNavigating();
-        state = State.waiting;
     }
 
     void Chase()
@@ -414,6 +415,120 @@ public class Enemy : MonoBehaviour
         StartNavigating();
     }
 
+    void Turning()
+    {
+        RotateAtPatrolNode();
+    }
+    
+    void SetTurning(Vector3 targetPoint)
+    {
+        targetRotationDirection = targetPoint - transform.position;
+        targetRotationDirection.Normalize();
+
+        targetRotationDirectionPerp.x = targetRotationDirection.z;
+        targetRotationDirectionPerp.z = -targetRotationDirection.x;
+
+        state = State.turning;
+    }
+
+    void SetTurningDirection(Vector3 targetDirection)
+    {
+        targetRotationDirection = targetDirection;
+
+        targetRotationDirectionPerp.x = targetRotationDirection.z;
+        targetRotationDirectionPerp.z = -targetRotationDirection.x;
+
+        state = State.turning;
+    }
+
+    void RotateAtPatrolNode()
+    {
+        RotateToTargetDirection();
+
+        //float read = Vector3.Dot(transform.forward, targetNodeDirection); 
+
+        //check if facing in the correct direction
+        if (Vector3.Dot(transform.forward, targetRotationDirection) > 0.999)
+        {
+            // start node timer
+            currentNodeMaxTime = patrolNodes[currentNodeIndex].lookDirection[currentLookDirectionIndex].time;
+
+            // increment index to be ready to find the next direction to look towards
+            currentLookDirectionIndex++;
+
+            // switch state to waiting
+
+            state = State.waiting;
+            //StartNavigating();
+        }
+    }
+
+    void RotateToTargetDirection()
+    {
+        //find direction to turn towards
+        float scalarDirection = 1;
+        //perp is short for perpendicular. 
+        float perpDot = (Vector3.Dot(transform.forward, targetRotationDirectionPerp));
+        if (perpDot > 0)
+        {
+            scalarDirection = -1;
+        }
+
+        //Assigning the rotation to this transform rotation
+        Vector3 currentRotation = transform.rotation.eulerAngles;
+        currentRotation.y += Time.deltaTime * rotationSpeed * scalarDirection;
+        transform.rotation = Quaternion.Euler(currentRotation);
+    }
+
+    void NodeTimer()
+    {
+        currentNodeTimer += Time.deltaTime;
+        if (currentNodeTimer > currentNodeMaxTime)
+        {
+            currentNodeTimer = 0f;
+            // Time is over
+
+            // Check if there is any more lookDirections at the current node
+            if(currentLookDirectionIndex < patrolNodes[currentNodeIndex].lookDirection.Length)
+            {
+                SetTurningDirection(patrolNodes[currentNodeIndex].lookDirection[currentLookDirectionIndex].direction);
+            }
+            else
+            {
+                // No more lookDirections
+                // reset lookDirection index
+                currentLookDirectionIndex = 0;
+
+                // increment currentNode index as this enemy has now left the current node
+                IncrementCurrentNodeIndex();
+
+                // switch to exit node state
+                SetTurning(patrolNodeTransforms[currentNodeIndex].position);
+                state = State.exitNode;
+                waitTimer = 0;
+            }
+        }
+    }
+
+    void ExitNode()
+    {
+        waitTimer += Time.deltaTime;
+        if (waitTimer > exitNodeWaitTime)
+        {
+            waitTimer = 0f;
+            // Time is over
+            // switch to patrol state
+            StartPatrol();
+        }
+
+        //check if facing in the correct direction
+        if (Vector3.Dot(transform.forward, targetRotationDirection) < 0.999)
+        {
+            // rotate towards next node
+            RotateToTargetDirection();
+        }
+    }
+
     void StopMoving()
     {
         agent.velocity = Vector3.zero;
@@ -453,20 +568,6 @@ public class Enemy : MonoBehaviour
         return (difference.magnitude < playerCollider.radius);
     }
 
-    void StartTurning()
-    {
-        
-        
-        targetNodeDirection = patrolNodeTransforms[currentNodeIndex].transform.position - transform.position;
-        targetNodeDirection.Normalize();
-        
-        targetNodeDirectionPerp.x = targetNodeDirection.z;
-        targetNodeDirectionPerp.z = -targetNodeDirection.x;
-        
-        state = State.turning;
-        targetRotation.y = Vector3.Angle(transform.forward, targetNodeDirection);
-    }
-
     private void OnDrawGizmos()
     {
         Color boxColour = Color.clear;
@@ -494,6 +595,24 @@ public class Enemy : MonoBehaviour
         Gizmos.color = wireColour;
         Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
 
+        if(showNodeLookAngles)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.matrix = Matrix4x4.identity;
+            
+            foreach (NodeInfo node in patrolNodes)
+            {
+                for(int i = 0; i < node.lookDirection.Length; i++)
+                {
+                    float angle = node.lookDirection[i].directionAngle;
+                    Vector3 angleDir = Quaternion.AngleAxis(angle, Vector3.up) * Vector3.forward;
+
+                    Transform nodeTransform = node.patrolNode.transform;
+                    Gizmos.DrawLine(nodeTransform.position, nodeTransform.position + (angleDir * 5));
+                }
+            }
+        }
+
         if(!showPath)
         {
             return;
@@ -501,15 +620,24 @@ public class Enemy : MonoBehaviour
 
         Gizmos.color = Color.red;
         Gizmos.matrix = Matrix4x4.identity;
-        for (int i = 0; i < patrolNodeTransforms.Length - 1; i++)
+
+        List<Transform> nodeList = new List<Transform>();
+
+        for (int i = 0; i < patrolNodes.Length; i++)
         {
-            Gizmos.DrawLine(patrolNodeTransforms[i].position, patrolNodeTransforms[i + 1].position);
+            Transform nodeTransform = patrolNodes[i].patrolNode.transform;
+            nodeList.Add(nodeTransform);
+        }
+
+        for (int i = 0; i < nodeList.Count - 1; i++)
+        {
+            Gizmos.DrawLine(nodeList[i].position, nodeList[i + 1].position);
         }
 
         if(!pathIsLinear)
         {
             // Path is not linear
-            Gizmos.DrawLine(patrolNodeTransforms[patrolNodeTransforms.Length - 1].position, patrolNodeTransforms[0].position);
+            Gizmos.DrawLine(nodeList[nodeList.Count - 1].position, nodeList[0].position);
         }
     }
 }
