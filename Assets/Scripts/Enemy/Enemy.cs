@@ -157,6 +157,11 @@ public class Enemy : MonoBehaviour
         {
             // Start chasing player
             SetChaseTarget();
+            if (!gameManager.hasCalledOut)
+            {
+                Callout();
+                
+            }
         }
 
         switch(state)
@@ -691,6 +696,12 @@ public class Enemy : MonoBehaviour
             // Path is not linear
             Gizmos.DrawLine(nodeList[nodeList.Count - 1].position, nodeList[0].position);
         }
+    }
+
+
+    void Callout()
+    {
+        gameManager.hasCalledOut = true;
     }
 
 }
