@@ -15,7 +15,8 @@ public class PlayerControl : MonoBehaviour
     public float roationSpeed = 15f;
     public float collisionSpeedReduction = 0.5f;
     Vector3 velocity = Vector3.zero;
-    Vector3 heading = Vector3.zero;
+    [HideInInspector]
+    public Vector3 heading = Vector3.zero;
     float currentSpeed = 0f;
 
     [Header("Alerted values")]
@@ -45,6 +46,7 @@ public class PlayerControl : MonoBehaviour
     void Start()
     {
         heading = transform.forward;
+        cameraAxis.position = transform.position;
     }
 
     // Update is called once per frame
