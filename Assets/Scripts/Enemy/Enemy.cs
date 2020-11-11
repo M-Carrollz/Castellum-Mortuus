@@ -101,15 +101,12 @@ public class Enemy : MonoBehaviour
     Vector3 targetRotationDirection = Vector3.zero;
     Vector3 targetRotationDirectionPerp = Vector3.zero;
    
-
-<<<<<<< HEAD
-=======
     [Header("Gizmos")]
     public bool showGizmo = false;
     public bool showPath = false;
     public bool showNodeLookAngles = false;
 
->>>>>>> master
+
     public void Init(GameManager gameManager, GameObject player)
     {
         this.gameManager = gameManager;
@@ -623,29 +620,6 @@ public class Enemy : MonoBehaviour
         return (difference.magnitude < playerCollider.radius);
     }
 
-<<<<<<< HEAD
-    void StartTurning()
-    {
-        
-        
-<<<<<<< HEAD
-        targetNodeDirection = patrolNodes[currentNodeIndex].transform.position - transform.position;
-=======
-        targetNodeDirection = patrolNodeTransforms[currentNodeIndex].transform.position - transform.position;
->>>>>>> master
-        targetNodeDirection.Normalize();
-        
-        targetNodeDirectionPerp.x = targetNodeDirection.z;
-        targetNodeDirectionPerp.z = -targetNodeDirection.x;
-        
-        state = State.turning;
-        targetRotation.y = Vector3.Angle(transform.forward, targetNodeDirection);
-    }
-<<<<<<< HEAD
-=======
-
-=======
->>>>>>> 1821b41536af1c6e7d0aecec694166be6728edd0
     private void OnDrawGizmos()
     {
         Color boxColour = Color.clear;
@@ -718,5 +692,5 @@ public class Enemy : MonoBehaviour
             Gizmos.DrawLine(nodeList[nodeList.Count - 1].position, nodeList[0].position);
         }
     }
->>>>>>> master
+
 }
