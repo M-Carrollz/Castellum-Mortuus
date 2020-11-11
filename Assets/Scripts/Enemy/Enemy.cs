@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -27,10 +28,33 @@ public class Enemy : MonoBehaviour
 
     Vision vision;
 
+    [System.Serializable]
+    public struct NodeInfo
+    {
+        [System.Serializable]
+        public struct LookAndTime
+        {
+            public float directionAngle;
+            [HideInInspector]
+            public Vector3 direction;
+            public float time;
+            public bool noNewLookDirection;
+        }
+
+        public PatrolNode patrolNode;
+        public LookAndTime[] lookDirection;
+    }
+
     // Patrol variables
 
     [Header("Patrol values")]
-    public Transform[] patrolNodes;
+    
+    // LinearPath values
+    public bool pathIsLinear = false;
+    int incrementValue = 1;
+
+    public NodeInfo[] patrolNodes;
+    Transform[] patrolNodeTransforms;
     int currentNodeIndex = 0;
 
     public float maxWaitTime = 2f;
@@ -66,6 +90,13 @@ public class Enemy : MonoBehaviour
     Vector3 targetNodeDirectionPerp = Vector3.zero;
    
 
+<<<<<<< HEAD
+=======
+    [Header("Gizmos")]
+    public bool showGizmo = false;
+    public bool showPath = false;
+
+>>>>>>> master
     public void Init(GameManager gameManager, GameObject player)
     {
         this.gameManager = gameManager;
@@ -78,8 +109,22 @@ public class Enemy : MonoBehaviour
         playerCollider = player.GetComponent<SphereCollider>();
         enemyTrigger = GetComponent<SphereCollider>();
 
+        patrolNodeTransforms = new Transform[patrolNodes.Length];
+
+        for(int i = 0; i < patrolNodes.Length; i++)
+        {
+            for(int j = 0; j < patrolNodes[i].lookDirection.Length; j++)
+            {
+                // Create a global direction based on the specified angle
+                patrolNodes[i].lookDirection[j].direction = Quaternion.AngleAxis(patrolNodes[i].lookDirection[j].directionAngle, Vector3.up) * Vector3.forward;
+            }
+
+            // Assign the transforms
+            patrolNodeTransforms[i] = patrolNodes[i].patrolNode.transform;
+        }
+
         agent = GetComponent<NavMeshAgent>();
-        agent.destination = patrolNodes[0].position;
+        agent.destination = patrolNodeTransforms[0].position;
 
         vision = GetComponent<Vision>();
 
@@ -159,7 +204,7 @@ public class Enemy : MonoBehaviour
 
     private void LateUpdate()
     {
-        if(IsPlayerInside())
+        if(gameManager.gameState == GameManager.GameState.running && IsPlayerInside())
         {
             gameManager.PlayerLose();
         }
@@ -179,15 +224,27 @@ public class Enemy : MonoBehaviour
     }
 
     void ArriveAtPatrolNode()
-    {     
-        currentNodeIndex++;
-
-        if(currentNodeIndex == patrolNodes.Length)
+    {
+        if(!pathIsLinear)
         {
-            currentNodeIndex = 0;
+            currentNodeIndex++;
+
+            if (currentNodeIndex == patrolNodeTransforms.Length)
+            {
+                currentNodeIndex = 0;
+            }
+        }
+        else
+        {
+            currentNodeIndex += incrementValue;
+
+            if(currentNodeIndex == patrolNodeTransforms.Length - 1 || currentNodeIndex == 0)
+            {
+                incrementValue = -incrementValue;
+            }
         }
 
-        agent.destination = patrolNodes[currentNodeIndex].position;
+        agent.destination = patrolNodeTransforms[currentNodeIndex].position;
 
         StopNavigating();
         state = State.waiting;
@@ -239,7 +296,7 @@ public class Enemy : MonoBehaviour
     void ReturnToPatrol()
     {
         // set destination once
-        agent.destination = patrolNodes[currentNodeIndex].position;
+        agent.destination = patrolNodeTransforms[currentNodeIndex].position;
 
         state = State.patrolling;
         StartNavigating();
@@ -288,7 +345,11 @@ public class Enemy : MonoBehaviour
     {
         
         
+<<<<<<< HEAD
         targetNodeDirection = patrolNodes[currentNodeIndex].transform.position - transform.position;
+=======
+        targetNodeDirection = patrolNodeTransforms[currentNodeIndex].transform.position - transform.position;
+>>>>>>> master
         targetNodeDirection.Normalize();
         
         targetNodeDirectionPerp.x = targetNodeDirection.z;
@@ -297,4 +358,53 @@ public class Enemy : MonoBehaviour
         state = State.turning;
         targetRotation.y = Vector3.Angle(transform.forward, targetNodeDirection);
     }
+<<<<<<< HEAD
+=======
+
+    private void OnDrawGizmos()
+    {
+        Color boxColour = Color.clear;
+        Color wireColour = Color.clear;
+
+        if (showGizmo)
+        {
+            boxColour = new Color(1, 0, 0, 0.4f);
+            wireColour = Color.red;
+        }
+
+        Vector3 drawVector = this.transform.lossyScale;
+        drawVector.x *= 1.5f;
+        drawVector.y *= 2.8f;
+        drawVector.z *= 1.2f;
+
+        Vector3 drawPos = this.transform.position;// + boxTrigger.center;
+        drawPos.y += 1.4f;
+
+        Gizmos.matrix = Matrix4x4.TRS(drawPos, this.transform.rotation, drawVector);
+
+        Gizmos.color = boxColour;
+        Gizmos.DrawCube(Vector3.zero, Vector3.one);
+
+        Gizmos.color = wireColour;
+        Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
+
+        if(!showPath)
+        {
+            return;
+        }
+
+        Gizmos.color = Color.red;
+        Gizmos.matrix = Matrix4x4.identity;
+        for (int i = 0; i < patrolNodeTransforms.Length - 1; i++)
+        {
+            Gizmos.DrawLine(patrolNodeTransforms[i].position, patrolNodeTransforms[i + 1].position);
+        }
+
+        if(!pathIsLinear)
+        {
+            // Path is not linear
+            Gizmos.DrawLine(patrolNodeTransforms[patrolNodeTransforms.Length - 1].position, patrolNodeTransforms[0].position);
+        }
+    }
+>>>>>>> master
 }
