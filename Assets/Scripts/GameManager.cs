@@ -5,6 +5,9 @@ using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
+    static Vector3 spawnPos = Vector3.zero;
+    public static bool checkPointActivated = false;
+
     public bool showNodeConncetions = false;
 
     public LayerMask nodeMask;
@@ -61,6 +64,11 @@ public class GameManager : MonoBehaviour
         allNodePoints = FindObjectsOfType<PatrolNode>();
 
         goalTrigger.GetComponent<GoalTrigger>().SetGameManager(this);
+
+        if(checkPointActivated)
+        {
+            player.transform.position = spawnPos;
+        }
     }
 
     // Start is called before the first frame update
@@ -106,6 +114,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Losing");
         // player lose related things go here.
+        ResetCheckPoints();
         PauseGame();
         gameState = GameState.lose;
         lossEvent.Invoke();
@@ -115,6 +124,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("winning");
         // player win related things go here
+        ResetCheckPoints();
         PauseGame();
         gameState = GameState.win;
         winEvent.Invoke();
@@ -152,6 +162,22 @@ public class GameManager : MonoBehaviour
                 // no other game state should change the state to running
                 break;
         }
+    }
+
+    public void HitCheckPoint(CheckPoint checkPoint)
+    {
+        spawnPos = checkPoint.spawnPosition.position;
+        checkPointActivated = true;
+    }
+
+    void ResetCheckPoints()
+    {
+        checkPointActivated = false;
+    }
+
+    private void OnDestroy()
+    {
+        Time.timeScale = timeScale;
     }
 
     private void OnDrawGizmos()

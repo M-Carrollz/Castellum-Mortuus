@@ -18,7 +18,7 @@ public class BoxTriggerToggle : MonoBehaviour
     public bool destroyOnActivate = false;
 
     bool hasEntered = false;
-    bool hasTriggered = true;
+    bool hasTriggered = false;
 
     public bool enter = true;
     public bool stay = false;
