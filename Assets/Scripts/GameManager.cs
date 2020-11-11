@@ -7,6 +7,10 @@ public class GameManager : MonoBehaviour
 {
     public bool showNodeConncetions = false;
 
+    public LayerMask nodeMask;
+
+    public LayerMask poiMask;
+
     public MenuController panelManager;
 
     bool isAlerted = false;
