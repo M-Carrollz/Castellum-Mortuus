@@ -11,7 +11,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Test_Peter/testScene_peter.unity
     guid: 4d11170a8234cd44baee3d50ea4f438c
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Test_Michael/Greybox_Battlements_Michael_001.unity
     guid: e9ca7590da2b75849867c7c64ecf4d89
+  - enabled: 1
+    path: Assets/Scenes/Beta_Battlements_001.unity
+    guid: 30df2700749951e47861cd6a467a7ee6
   m_configObjects: {}
