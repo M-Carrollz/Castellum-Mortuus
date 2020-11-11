@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7719831624344872353}
   - component: {fileID: 7429435571253898806}
-  m_Layer: 0
+  - component: {fileID: 3845830673465256238}
+  m_Layer: 10
   m_Name: PatrolNode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,3 +46,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   connections: []
   showConnections: 0
+  color: {r: 0, g: 0, b: 1, a: 1}
+  collider: {fileID: 0}
+--- !u!135 &3845830673465256238
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3032750219378714767}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}

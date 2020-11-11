@@ -10,6 +10,14 @@ public class PatrolNode : MonoBehaviour
 
     public Color color = Color.blue;
 
+    [HideInInspector]
+    public SphereCollider collider;
+
+    public void Awake()
+    {
+        collider = GetComponent<SphereCollider>();
+    }
+
     public void DebugDrawConnections(Color colour)
     {
         foreach(Transform otherNode in connections)
