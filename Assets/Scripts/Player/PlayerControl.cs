@@ -46,6 +46,7 @@ public class PlayerControl : MonoBehaviour
     void Start()
     {
         heading = transform.forward;
+        cameraAxis.position = transform.position;
     }
 
     // Update is called once per frame
