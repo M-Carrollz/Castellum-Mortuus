@@ -90,6 +90,9 @@ public class Enemy : MonoBehaviour
     public PatrolNode lastTraversedNode = null;
     public float traversalRadius = 5f;
 
+    PointOfInterestNode pointOfInterest = null;
+    int poiLocationIndex = 0;
+
     //Turning variables
     [Header("Rotation values")]
     public float rotationSpeed = 15;
@@ -260,8 +263,8 @@ public class Enemy : MonoBehaviour
 
     void Chase()
     {
-        Vector3 lookRotation = agent.steeringTarget - transform.position;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookRotation), additionalRotationSpeed * Time.deltaTime);
+        //Vector3 lookRotation = agent.steeringTarget - transform.position;
+        //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookRotation), additionalRotationSpeed * Time.deltaTime);
 
         if (agent.remainingDistance < catchDistance)
         {
@@ -354,8 +357,13 @@ public class Enemy : MonoBehaviour
 
         // Search behaviours
 
-        // if can see point of interest node
-        // start following those directions
+        // if can see point of interest node && not already following a point of interest
+        if(pointOfInterest == null && FindPointOfInterest())
+        {
+            // start following those directions
+            agent.destination = pointOfInterest.transform.position;
+            poiLocationIndex = 0;
+        }
 
         // Find distance to destination
         float remain = agent.remainingDistance;
@@ -376,6 +384,19 @@ public class Enemy : MonoBehaviour
         // Find new search point
 
         // if following Point of Interest node
+        if(pointOfInterest != null)
+        {
+            // set destination to location in poi
+            if(pointOfInterest.locations.Length > 0)
+            {
+                agent.destination = pointOfInterest.locations[poiLocationIndex].position;
+                poiLocationIndex++;
+                if(poiLocationIndex == pointOfInterest.locations.Length)
+                {
+                    pointOfInterest = null;
+                }
+            }
+        }
 
         // if wandering around
     }
@@ -406,10 +427,41 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    bool FindPointOfInterest()
+    {
+        Collider[] poiInRadius = Physics.OverlapSphere(transform.position, traversalRadius, gameManager.poiMask);
+
+        if (poiInRadius.Length == 0)
+        {
+            // haven't seen a node
+            return false;
+        }
+        else
+        {
+            int closestNodeIndex = 0;
+            float shortestDistance = Vector3.Distance(transform.position, poiInRadius[0].transform.position);
+            for (int i = 1; i < poiInRadius.Length; i++)
+            {
+                float currentDistance = Vector3.Distance(transform.position, poiInRadius[i].transform.position);
+                if (shortestDistance > currentDistance)
+                {
+                    closestNodeIndex = i;
+                    shortestDistance = currentDistance;
+                }
+            }
+
+            pointOfInterest = poiInRadius[closestNodeIndex].gameObject.GetComponent<PointOfInterestNode>();
+            return true;
+        }
+    }
+
     void ReturnToPatrol()
     {
         // set destination once
         agent.destination = patrolNodeTransforms[currentNodeIndex].position;
+
+        // Reset search values
+        pointOfInterest = null;
 
         state = State.patrolling;
         StartNavigating();

@@ -45,7 +45,9 @@ public class PointOfInterestNode : MonoBehaviour
             return;
         }
 
-        for(int i = 0; i < locations.Length; i++)
+        Vector3 previousTransPos = transform.position;
+
+        for (int i = 0; i < locations.Length; i++)
         {
             Gizmos.color = new Color(locationsColour.r, locationsColour.g, locationsColour.b, locationsColour.a * 0.4f);
             Gizmos.DrawSphere(locations[i].position, 0.5f);
@@ -56,21 +58,23 @@ public class PointOfInterestNode : MonoBehaviour
             Gizmos.color = pathColour;
 
             NavMeshPath path = new NavMeshPath();
-            bool validPath = NavMesh.CalculatePath(transform.position, locations[i].position, NavMesh.AllAreas, path);
+            bool validPath = NavMesh.CalculatePath(previousTransPos, locations[i].position, NavMesh.AllAreas, path);
 
-            if(!validPath)
+            if (!validPath)
             {
                 continue;
             }
 
             Vector3[] corners = path.corners;
-            Vector3 oldPos = transform.position;
+            Vector3 oldPos = previousTransPos;
 
             for(int j = 0; j < corners.Length; j++)
             {
                 Gizmos.DrawLine(oldPos, corners[j]);
                 oldPos = corners[j];
             }
+
+            previousTransPos = locations[i].position;
         }
     }
 
@@ -90,6 +94,8 @@ public class PointOfInterestNode : MonoBehaviour
             return;
         }
 
+        Vector3 previousTransPos = transform.position;
+
         for (int i = 0; i < locations.Length; i++)
         {
             Gizmos.color = new Color(locationsColour.r, locationsColour.g, locationsColour.b, locationsColour.a * 0.4f);
@@ -101,7 +107,7 @@ public class PointOfInterestNode : MonoBehaviour
             Gizmos.color = pathColour;
 
             NavMeshPath path = new NavMeshPath();
-            bool validPath = NavMesh.CalculatePath(transform.position, locations[i].position, NavMesh.AllAreas, path);
+            bool validPath = NavMesh.CalculatePath(previousTransPos, locations[i].position, NavMesh.AllAreas, path);
 
             if (!validPath)
             {
@@ -109,13 +115,15 @@ public class PointOfInterestNode : MonoBehaviour
             }
 
             Vector3[] corners = path.corners;
-            Vector3 oldPos = transform.position;
+            Vector3 oldPos = previousTransPos;
 
             for (int j = 0; j < corners.Length; j++)
             {
                 Gizmos.DrawLine(oldPos, corners[j]);
                 oldPos = corners[j];
             }
+
+            previousTransPos = locations[i].position;
         }
     }
 }
