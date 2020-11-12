@@ -14,10 +14,18 @@ public class CameraController : MonoBehaviour
     Vector3 desiredLocation = Vector3.zero;
     Vector3 desiredDirection = Vector3.zero;
 
+    public LayerMask floorMask;
     public float distance = 5f;
     public float speed = 10f;
+    
+    public enum FollowType
+    {
+        direct,
+        heading,
+        mouse
+    }
 
-    public bool interp = false;
+    public FollowType followType = FollowType.heading;
 
     [Header("Shake")]
 
@@ -46,7 +54,7 @@ public class CameraController : MonoBehaviour
     {
         mainCam = GetComponentInChildren<Camera>();
         mainCamTransform = mainCam.gameObject.transform;
-        mainCamLocalOrigin = mainCamTransform.localPosition;
+
         player = FindObjectOfType<PlayerControl>();
         playerTransform = player.gameObject.transform;
     }
@@ -55,6 +63,8 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         transform.position = playerTransform.position;
+
+        mainCamLocalOrigin = mainCamTransform.localPosition;
     }
 
     // Update is called once per frame
@@ -68,24 +78,50 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        desiredLocation = playerTransform.position + (player.heading * distance);
-        desiredDirection = desiredLocation - transform.position;
-
-        Debug.DrawLine(transform.position, transform.position + desiredDirection, Color.blue);
-
-        if(player.currentSpeed == 0)
+        switch(followType)
         {
-            return;
-        }
+            case FollowType.direct:
 
-        if (interp)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, desiredLocation, speed * Time.deltaTime);
-            //transform.position = transform.position + desiredDirection;
-        }
-        else
-        {
-            transform.position = playerTransform.position;
+                if (player.currentSpeed == 0)
+                {
+                    return;
+                }
+
+                transform.position = playerTransform.position;
+
+                break;
+            case FollowType.heading:
+
+                if (player.currentSpeed == 0)
+                {
+                    return;
+                }
+
+                desiredLocation = playerTransform.position + (player.heading * distance);
+                desiredDirection = desiredLocation - transform.position;
+                transform.position = Vector3.MoveTowards(transform.position, desiredLocation, speed * Time.deltaTime);
+
+                break;
+            case FollowType.mouse:
+
+                //transform.position = playerTransform.position;
+
+                RaycastHit hit;
+                Ray mouseRay = mainCam.ScreenPointToRay(Input.mousePosition);
+                if(Physics.Raycast(mouseRay, out hit, floorMask))
+                {
+                    desiredLocation = hit.point;
+
+
+                }
+                desiredDirection = desiredLocation - playerTransform.position;
+                Debug.DrawLine(playerTransform.position, playerTransform.position + desiredDirection, Color.blue);
+
+                transform.position = playerTransform.position + (desiredDirection * distance);
+
+                //transform.position = Vector3.MoveTowards(transform.position, desiredLocation, speed * Time.deltaTime);
+
+                break;
         }
     }
 
@@ -148,5 +184,11 @@ public class CameraController : MonoBehaviour
         shakeOffset.x = noise.x;
         shakeOffset.y = noise.y;
         mainCamTransform.localPosition = mainCamLocalOrigin + shakeOffset;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(mainCamTransform.position, 0.5f);
     }
 }
