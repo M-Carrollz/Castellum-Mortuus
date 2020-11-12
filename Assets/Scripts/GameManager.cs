@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     public LayerMask nodeMask;
 
+    public LayerMask enemyMask;
+
     public LayerMask poiMask;
 
     public MenuController panelManager;
