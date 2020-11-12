@@ -91,36 +91,39 @@ public class CameraController : MonoBehaviour
 
                 break;
             case FollowType.heading:
-
-                if (player.currentSpeed == 0)
                 {
-                    return;
+                    if (player.currentSpeed == 0)
+                    {
+                        return;
+                    }
+
+                    desiredLocation = playerTransform.position + (player.heading * distance);
+                    desiredDirection = desiredLocation - transform.position;
+                    float dist = Vector3.Distance(transform.position, desiredLocation);
+                    transform.position = Vector3.MoveTowards(transform.position, desiredLocation, speed * dist * Time.deltaTime);
                 }
-
-                desiredLocation = playerTransform.position + (player.heading * distance);
-                desiredDirection = desiredLocation - transform.position;
-                transform.position = Vector3.MoveTowards(transform.position, desiredLocation, speed * Time.deltaTime);
-
                 break;
             case FollowType.mouse:
-
-                //transform.position = playerTransform.position;
-
-                RaycastHit hit;
-                Ray mouseRay = mainCam.ScreenPointToRay(Input.mousePosition);
-                if(Physics.Raycast(mouseRay, out hit, floorMask))
                 {
-                    desiredLocation = hit.point;
+                    //transform.position = playerTransform.position;
 
+                    RaycastHit hit;
+                    Ray mouseRay = mainCam.ScreenPointToRay(Input.mousePosition);
+                    if (Physics.Raycast(mouseRay, out hit, floorMask))
+                    {
+                        desiredLocation = hit.point;
+                        desiredDirection = desiredLocation - playerTransform.position;
+                    }
+                    Debug.DrawLine(playerTransform.position, playerTransform.position + desiredDirection, Color.blue);
 
+                    Vector3 targetLocation = playerTransform.position + (desiredDirection * distance);
+
+                    float dist = Vector3.Distance(transform.position, targetLocation);
+
+                    transform.position = Vector3.MoveTowards(transform.position, targetLocation, speed * dist * Time.deltaTime);
+
+                    //transform.position = Vector3.MoveTowards(transform.position, desiredLocation, speed * Time.deltaTime);
                 }
-                desiredDirection = desiredLocation - playerTransform.position;
-                Debug.DrawLine(playerTransform.position, playerTransform.position + desiredDirection, Color.blue);
-
-                transform.position = playerTransform.position + (desiredDirection * distance);
-
-                //transform.position = Vector3.MoveTowards(transform.position, desiredLocation, speed * Time.deltaTime);
-
                 break;
         }
     }
