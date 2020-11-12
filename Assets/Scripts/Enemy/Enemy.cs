@@ -30,7 +30,9 @@ public class Enemy : MonoBehaviour
 
     Vision vision;
 
-    Collider[] allyInRadius;
+    public Collider[] allyInRadius;
+
+    public float calloutRadius = 5f;
 
     [System.Serializable]
     public struct NodeInfo
@@ -154,7 +156,7 @@ public class Enemy : MonoBehaviour
     {
         // update lastTraversed node
         FindClosestNodeInRadius(traversalRadius);
-        allyInRadius = Callout();
+        GetAlliesInRadius();
 
         if (IsPlayerSpotted())
         {
@@ -162,7 +164,6 @@ public class Enemy : MonoBehaviour
             SetChaseTarget();
             if (!gameManager.hasCalledOut)
             {
-                  
                 gameManager.hasCalledOut = true;
             }
 
@@ -709,10 +710,10 @@ public class Enemy : MonoBehaviour
     }
 
 
-    Collider[] Callout()
+    void GetAlliesInRadius()
     {
-        Collider[] temp = Physics.OverlapSphere(transform.position, traversalRadius, gameManager.enemyMask);
-        return temp;
+        allyInRadius = Physics.OverlapSphere(transform.position, calloutRadius, gameManager.enemyMask);
+       
     }
 
 }

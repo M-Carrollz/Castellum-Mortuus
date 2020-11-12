@@ -117,7 +117,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
- 
+    public bool IsEnemyAlert()
+    {
+        return isAlerted;
+    }
 
     public void PlayerLose()
     {
