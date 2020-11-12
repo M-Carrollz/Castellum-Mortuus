@@ -98,6 +98,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prop_Crate_001_Long_001_Closed
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 8df0c3623c9336a48a0f29bab4ecc960,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8df0c3623c9336a48a0f29bab4ecc960, type: 3}
 --- !u!4 &6866845178113221685 stripped
