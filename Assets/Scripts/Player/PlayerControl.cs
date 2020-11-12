@@ -95,22 +95,6 @@ public class PlayerControl : MonoBehaviour
 
         currentSpeed = velocity.magnitude;
 
-        // These are temporary camera controls for testing purposes.
-        if(Input.GetKey("q"))
-        {
-            // Rotate cam left
-            Vector3 rotation = cameraAxis.eulerAngles;
-            rotation.y += camRotationSpeed * Time.deltaTime;
-            cameraAxis.eulerAngles = rotation;
-        }
-        if (Input.GetKey("e"))
-        {
-            // Rotate cam right
-            Vector3 rotation = cameraAxis.eulerAngles;
-            rotation.y -= camRotationSpeed * Time.deltaTime;
-            cameraAxis.eulerAngles = rotation;
-        }
-
         LateUpdateish();
     }
 
