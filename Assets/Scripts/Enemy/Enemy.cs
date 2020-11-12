@@ -30,6 +30,8 @@ public class Enemy : MonoBehaviour
 
     Vision vision;
 
+    Collider[] allyInRadius;
+
     [System.Serializable]
     public struct NodeInfo
     {
@@ -101,11 +103,11 @@ public class Enemy : MonoBehaviour
     Vector3 targetRotationDirection = Vector3.zero;
     Vector3 targetRotationDirectionPerp = Vector3.zero;
    
-
     [Header("Gizmos")]
     public bool showGizmo = false;
     public bool showPath = false;
     public bool showNodeLookAngles = false;
+
 
     public void Init(GameManager gameManager, GameObject player)
     {
@@ -152,11 +154,24 @@ public class Enemy : MonoBehaviour
     {
         // update lastTraversed node
         FindClosestNodeInRadius(traversalRadius);
+        allyInRadius = Callout();
 
         if (IsPlayerSpotted())
         {
             // Start chasing player
             SetChaseTarget();
+            if (!gameManager.hasCalledOut)
+            {
+                  
+                gameManager.hasCalledOut = true;
+            }
+
+            
+            for (int i = 0; i < allyInRadius.Length; i++)
+            {
+                allyInRadius[i].gameObject.GetComponent<Enemy>().SetChaseTarget();
+            }
+        
         }
 
         switch(state)
@@ -692,4 +707,12 @@ public class Enemy : MonoBehaviour
             Gizmos.DrawLine(nodeList[nodeList.Count - 1].position, nodeList[0].position);
         }
     }
+
+
+    Collider[] Callout()
+    {
+        Collider[] temp = Physics.OverlapSphere(transform.position, traversalRadius, gameManager.enemyMask);
+        return temp;
+    }
+
 }

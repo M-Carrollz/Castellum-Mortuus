@@ -12,13 +12,18 @@ public class GameManager : MonoBehaviour
 
     public LayerMask nodeMask;
 
+    public LayerMask enemyMask;
+
     public LayerMask poiMask;
 
     public MenuController panelManager;
 
     bool isAlerted = false;
 
-    Enemy[] allEnemies;
+    public bool hasCalledOut = false;
+
+    public Enemy[] allEnemies;
+
 
     public PlayerControl player;
 
@@ -91,10 +96,11 @@ public class GameManager : MonoBehaviour
             }
         }
 
+
         // Temp input for pause
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if(gameState == GameState.paused)
+            if (gameState == GameState.paused)
             {
                 UnpauseGame();
             }
@@ -103,12 +109,15 @@ public class GameManager : MonoBehaviour
                 PauseGame();
             }
         }
+
+        if(!isAlerted)
+        {
+            hasCalledOut = false;
+
+        }
     }
 
-    public bool IsEnemyAlert()
-    {
-        return isAlerted;
-    }
+ 
 
     public void PlayerLose()
     {
@@ -129,6 +138,7 @@ public class GameManager : MonoBehaviour
         gameState = GameState.win;
         winEvent.Invoke();
     }
+
 
     public void PauseGame()
     {
@@ -192,4 +202,5 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
 }
