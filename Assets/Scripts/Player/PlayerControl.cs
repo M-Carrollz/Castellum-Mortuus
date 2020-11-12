@@ -17,7 +17,8 @@ public class PlayerControl : MonoBehaviour
     Vector3 velocity = Vector3.zero;
     [HideInInspector]
     public Vector3 heading = Vector3.zero;
-    float currentSpeed = 0f;
+    [HideInInspector]
+    public float currentSpeed = 0f;
 
     [Header("Alerted values")]
     public float additionalSpeedMultiplier = 1.5f;
@@ -46,7 +47,7 @@ public class PlayerControl : MonoBehaviour
     void Start()
     {
         heading = transform.forward;
-        cameraAxis.position = transform.position;
+        //cameraAxis.position = transform.position;
     }
 
     // Update is called once per frame
@@ -93,22 +94,6 @@ public class PlayerControl : MonoBehaviour
         velocity *= speed;
 
         currentSpeed = velocity.magnitude;
-
-        // These are temporary camera controls for testing purposes.
-        if(Input.GetKey("q"))
-        {
-            // Rotate cam left
-            Vector3 rotation = cameraAxis.eulerAngles;
-            rotation.y += camRotationSpeed * Time.deltaTime;
-            cameraAxis.eulerAngles = rotation;
-        }
-        if (Input.GetKey("e"))
-        {
-            // Rotate cam right
-            Vector3 rotation = cameraAxis.eulerAngles;
-            rotation.y -= camRotationSpeed * Time.deltaTime;
-            cameraAxis.eulerAngles = rotation;
-        }
 
         LateUpdateish();
     }
@@ -160,7 +145,7 @@ public class PlayerControl : MonoBehaviour
             if(dotProd >= 0.999)
             {
                 // heading is equal to hit direction
-                cameraAxis.position = transform.position;
+                //cameraAxis.position = transform.position;
                 return;
             }
 
@@ -187,7 +172,7 @@ public class PlayerControl : MonoBehaviour
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(heading), roationSpeed * Time.deltaTime);
             }
 
-            cameraAxis.position = transform.position;
+            //cameraAxis.position = transform.position;
             return;
         }
 
@@ -232,7 +217,7 @@ public class PlayerControl : MonoBehaviour
                 break;
         }
 
-        cameraAxis.position = transform.position;
+        //cameraAxis.position = transform.position;
     }
 
     public void SetGameManager(GameManager gameManager)
