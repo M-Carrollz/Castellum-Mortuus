@@ -188,10 +188,4 @@ public class CameraController : MonoBehaviour
         shakeOffset.y = noise.y;
         mainCamTransform.localPosition = mainCamLocalOrigin + shakeOffset;
     }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(mainCamTransform.position, 0.5f);
-    }
 }

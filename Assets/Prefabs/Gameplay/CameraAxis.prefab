@@ -47,7 +47,7 @@ MonoBehaviour:
   floorMask:
     serializedVersion: 2
     m_Bits: 1048576
-  distance: 2
+  distance: 1.8
   speed: 5
   followType: 1
   shake: 0
