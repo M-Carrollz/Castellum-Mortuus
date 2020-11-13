@@ -47,10 +47,15 @@ MonoBehaviour:
   nodeMask:
     serializedVersion: 2
     m_Bits: 1024
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 4096
   poiMask:
     serializedVersion: 2
     m_Bits: 2048
   panelManager: {fileID: 0}
+  hasCalledOut: 0
+  allEnemies: []
   player: {fileID: 0}
   goalTrigger: {fileID: 0}
   winEvent:

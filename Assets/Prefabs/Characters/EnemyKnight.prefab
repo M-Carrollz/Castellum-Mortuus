@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 2998202391127503852}
   - component: {fileID: 608218355062658192}
   - component: {fileID: 1442150611335953340}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: EnemyKnight
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -141,19 +141,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30139ef22e60f314b97ce1cd83e8a5dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 1
+  allyInRadius: []
+  calloutRadius: 20
   pathIsLinear: 0
   patrolNodes: []
-  maxWaitTime: 2
+  exitNodeWaitTime: 2
   arriveDistance: 0.5
   additionalSpeed: 1.5
   catchDistance: 0.5
   additionalRotationSpeed: 45
   searchRotateSpeed: 50
   maxSearchTime: 2
+  lastTraversedNode: {fileID: 0}
+  traversalRadius: 5
   rotationSpeed: 100
   showGizmo: 0
   showPath: 0
+  showNodeLookAngles: 0
 --- !u!114 &2998202391127503852
 MonoBehaviour:
   m_ObjectHideFlags: 0
