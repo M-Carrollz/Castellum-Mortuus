@@ -126,7 +126,6 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Losing");
         // player lose related things go here.
-        ResetCheckPoints();
         PauseGame();
         gameState = GameState.lose;
         lossEvent.Invoke();

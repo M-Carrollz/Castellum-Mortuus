@@ -49,8 +49,12 @@ MonoBehaviour:
   camRotationSpeed: 45
   speed: 6.5
   roationSpeed: 15
+  collisionSpeedReduction: 0.5
+  heading: {x: 0, y: 0, z: 0}
+  currentSpeed: 0
   additionalSpeedMultiplier: 1.5
   moveSpace: 1
+  showGizmo: 0
 --- !u!135 &7372632055239716400
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -131,6 +135,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Character_Thief_001
       objectReference: {fileID: 0}
+    - target: {fileID: 432369131853227882, guid: 4998b56537c01ff45b92523d26f97fa9,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: c1911c1817240b047acc89813b95a7ad, type: 2}
+    - target: {fileID: 5897238399195829035, guid: 4998b56537c01ff45b92523d26f97fa9,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: c1911c1817240b047acc89813b95a7ad, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4998b56537c01ff45b92523d26f97fa9, type: 3}
 --- !u!4 &555044760511711805 stripped
