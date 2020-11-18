@@ -39,6 +39,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4339291758110552757}
     m_Modifications:
+    - target: {fileID: -8859053053575589305, guid: 2faed9ddfa1342b4c83d1d50ddfd6056,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 66afd1e43a02d574a9017979c7acdd3a, type: 2}
+    - target: {fileID: -6363143771652604557, guid: 2faed9ddfa1342b4c83d1d50ddfd6056,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 2faed9ddfa1342b4c83d1d50ddfd6056,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -98,6 +108,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Environment_CastleInt_010_BigRoom_002_Floor
+      objectReference: {fileID: 0}
+    - target: {fileID: 7141829834878030250, guid: 2faed9ddfa1342b4c83d1d50ddfd6056,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2faed9ddfa1342b4c83d1d50ddfd6056, type: 3}
@@ -169,6 +184,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -1504981713932161579, guid: 3a18b2eddda43e043830bc73cda0e70e,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e39122366b04a664f9f539620ba17ede, type: 2}
     - target: {fileID: -927199367670048503, guid: 3a18b2eddda43e043830bc73cda0e70e,
         type: 3}
       propertyPath: m_Name
