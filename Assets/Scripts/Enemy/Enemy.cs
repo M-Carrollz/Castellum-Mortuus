@@ -104,7 +104,12 @@ public class Enemy : MonoBehaviour
     
     Vector3 targetRotationDirection = Vector3.zero;
     Vector3 targetRotationDirectionPerp = Vector3.zero;
-   
+
+    // Audio
+    AudioSource audio;
+    public AudioClip calloutClip;
+    bool playCallout = false;
+
     [Header("Gizmos")]
     public bool showGizmo = false;
     public bool showPath = false;
@@ -148,7 +153,9 @@ public class Enemy : MonoBehaviour
 
         //magic number to offset from the floating navmesh
         //agent.baseOffset = -0.08333214f; 
-       
+
+        audio = GetComponent<AudioSource>();
+        audio.time = UnityEngine.Random.Range(0, audio.clip.length);
     }
 
     // Update is called once per frame
@@ -165,11 +172,16 @@ public class Enemy : MonoBehaviour
             if (!gameManager.hasCalledOut)
             {
                 gameManager.hasCalledOut = true;
+                playCallout = true;
             }
 
             
             for (int i = 0; i < allyInRadius.Length; i++)
             {
+                if(allyInRadius[i].gameObject == gameObject)
+                {
+                    continue;
+                }
                 allyInRadius[i].gameObject.GetComponent<Enemy>().SetChaseTarget();
             }
         
@@ -213,6 +225,14 @@ public class Enemy : MonoBehaviour
         if(gameManager.gameState == GameManager.GameState.running && IsPlayerInside())
         {
             gameManager.PlayerLose();
+            return;
+        }
+
+        if (playCallout)
+        {
+            playCallout = false;
+            audio.PlayOneShot(calloutClip);
+            Debug.Log("Sound");
         }
     }
 
