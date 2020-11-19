@@ -2988,6 +2988,16 @@ PrefabInstance:
       propertyPath: Mute
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5239562625053738040, guid: c68cdec30d97b0246866d556cd28f7d7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5239562625053738042, guid: c68cdec30d97b0246866d556cd28f7d7,
+        type: 3}
+      propertyPath: m_Volume
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 7039068464473782904, guid: c68cdec30d97b0246866d556cd28f7d7,
         type: 3}
       propertyPath: player
