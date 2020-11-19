@@ -67,4 +67,20 @@ public class MenuController : MonoBehaviour
             panels[i].SetActive(false);
         }
     }
+
+    public void ChangeResolutionTo1280()
+    {
+        Debug.Log(Screen.width);
+        //Resolution r = Screen.currentResolution;
+        Screen.SetResolution(1280, 720, true);
+        Debug.Log(Screen.width);
+    }
+
+    public void ChangeResolutionTo1600()
+    {
+        Debug.Log(Screen.width);
+        //Resolution r = Screen.currentResolution;
+        Screen.SetResolution(1600, 900, true);
+        Debug.Log(Screen.width);
+    }
 }
