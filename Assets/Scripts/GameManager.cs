@@ -109,8 +109,11 @@ public class GameManager : MonoBehaviour
                 PauseGame();
             }
         }
+    }
 
-        if(!isAlerted)
+    private void LateUpdate()
+    {
+        if (!isAlerted)
         {
             hasCalledOut = false;
 
