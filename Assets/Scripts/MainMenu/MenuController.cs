@@ -82,15 +82,15 @@ public class MenuController : MonoBehaviour
   
     }
 
-    public void ChangeResolutionTo1600()
+    public void ChangeResolutionTo2560()//2560x1440
     {
         if (Screen.fullScreen)
         {
-            Screen.SetResolution(1600, 900, true);
+            Screen.SetResolution(2560, 1440, true);
         }
         else
         {
-            Screen.SetResolution(1600, 900, false);
+            Screen.SetResolution(2560, 1440, false);
         }
     }
 
