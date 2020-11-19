@@ -70,17 +70,50 @@ public class MenuController : MonoBehaviour
 
     public void ChangeResolutionTo1280()
     {
-        Debug.Log(Screen.width);
-        //Resolution r = Screen.currentResolution;
-        Screen.SetResolution(1280, 720, true);
-        Debug.Log(Screen.width);
+     
+        if(Screen.fullScreen)
+        {
+            Screen.SetResolution(1280, 720, true);
+        }
+        else
+        {
+            Screen.SetResolution(1280, 720, false);
+        }
+  
     }
 
     public void ChangeResolutionTo1600()
     {
-        Debug.Log(Screen.width);
-        //Resolution r = Screen.currentResolution;
-        Screen.SetResolution(1600, 900, true);
-        Debug.Log(Screen.width);
+        if (Screen.fullScreen)
+        {
+            Screen.SetResolution(1600, 900, true);
+        }
+        else
+        {
+            Screen.SetResolution(1600, 900, false);
+        }
     }
+
+    public void ChangeResolutionTo1920()
+    {
+        if (Screen.fullScreen)
+        {
+            Screen.SetResolution(1920, 1080, true);
+        }
+        else
+        {
+            Screen.SetResolution(1920, 1080, false);
+        }
+    }
+
+    public void GoWindowed()
+    {
+        Screen.fullScreen = false;
+    }
+
+    public void GoFullScreen()
+    {
+        Screen.fullScreen = true;
+    }
+
 }
