@@ -101,10 +101,10 @@ public class PlayerControl : MonoBehaviour
 
         currentSpeed = velocity.magnitude;
 
-        LateUpdateish();
+       
     }
 
-    private void LateUpdateish()
+    private void LateUpdate()
     {
         if(currentSpeed == 0)
         {

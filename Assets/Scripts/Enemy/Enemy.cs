@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     PlayerControl playerControl;
     SphereCollider playerCollider;
     SphereCollider enemyTrigger;
-
+    
     public enum State
     {
         waiting,
@@ -109,6 +109,9 @@ public class Enemy : MonoBehaviour
     AudioSource audio;
     public AudioClip calloutClip;
     bool playCallout = false;
+
+    //Animation stuff
+    public Animator anim;
 
     [Header("Gizmos")]
     public bool showGizmo = false;
@@ -218,6 +221,7 @@ public class Enemy : MonoBehaviour
                 break;
 
         }
+
     }
 
     private void LateUpdate()
@@ -233,6 +237,15 @@ public class Enemy : MonoBehaviour
             playCallout = false;
             audio.PlayOneShot(calloutClip);
             Debug.Log("Sound");
+        }
+
+        anim.SetInteger("enemyState", (int)state);
+        AnimatorStateInfo info;
+        info = anim.GetCurrentAnimatorStateInfo(0);
+        Debug.Log(info.tagHash);
+        if ((int)state == 1)
+        {
+            int point = 0;
         }
     }
 
