@@ -34,6 +34,11 @@ public class PlayerControl : MonoBehaviour
     }
     public MoveSpace moveSpace = MoveSpace.camera;
 
+    [Header("Animation")]
+    public Animator anim;
+    public string moveSpeedParam = "moveSpeed";
+    int animHashId = 0;
+
     [Header("Gizmos")]
     public bool showGizmo = false;
 
@@ -41,6 +46,7 @@ public class PlayerControl : MonoBehaviour
     {
         playerCollider = GetComponent<SphereCollider>();
         obstacleMask = LayerMask.GetMask("Obstacle");
+        animHashId = Animator.StringToHash(moveSpeedParam);
     }
 
     // Start is called before the first frame update
@@ -95,21 +101,24 @@ public class PlayerControl : MonoBehaviour
 
         currentSpeed = velocity.magnitude;
 
-        LateUpdateish();
+       
     }
 
-    private void LateUpdateish()
+    private void LateUpdate()
     {
         if(currentSpeed == 0)
         {
+            anim.SetFloat(animHashId, currentSpeed);
             return;
         }
         float sphereCastDistance = speed;
+        anim.speed = 1;
         if(gameManager.IsEnemyAlert())
         {
             velocity *= additionalSpeedMultiplier;
             currentSpeed *= additionalSpeedMultiplier;
             sphereCastDistance *= additionalSpeedMultiplier;
+            anim.speed = anim.speed * additionalSpeedMultiplier;
         }
 
         sphereCastDistance *= Time.deltaTime;
@@ -218,6 +227,8 @@ public class PlayerControl : MonoBehaviour
         }
 
         //cameraAxis.position = transform.position;
+
+        anim.SetFloat(animHashId, currentSpeed);
     }
 
     public void SetGameManager(GameManager gameManager)
