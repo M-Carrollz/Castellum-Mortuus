@@ -109,12 +109,35 @@ public class GameManager : MonoBehaviour
                 PauseGame();
             }
         }
+    }
 
-        if(!isAlerted)
+    private void LateUpdate()
+    {
+        if (!isAlerted)
         {
             hasCalledOut = false;
 
         }
+
+       
+        //handles cursor locking
+        switch(gameState)
+        {
+            case GameState.win:
+                Cursor.lockState = CursorLockMode.None;
+                break;
+            case GameState.lose:
+                Cursor.lockState = CursorLockMode.None;
+                break;
+            case GameState.paused:
+                Cursor.lockState = CursorLockMode.None;
+                break;
+            default:
+                Cursor.lockState = CursorLockMode.Locked;
+                break;
+
+        }
+
     }
 
     public bool IsEnemyAlert()
@@ -144,8 +167,9 @@ public class GameManager : MonoBehaviour
 
     public void PauseGame()
     {
+
         // Pause game
-        switch(gameState)
+        switch (gameState)
         {
             case GameState.running:
                 Time.timeScale = 0;
