@@ -67,4 +67,53 @@ public class MenuController : MonoBehaviour
             panels[i].SetActive(false);
         }
     }
+
+    public void ChangeResolutionTo1280()
+    {
+     
+        if(Screen.fullScreen)
+        {
+            Screen.SetResolution(1280, 720, true);
+        }
+        else
+        {
+            Screen.SetResolution(1280, 720, false);
+        }
+  
+    }
+
+    public void ChangeResolutionTo2560()//2560x1440
+    {
+        if (Screen.fullScreen)
+        {
+            Screen.SetResolution(2560, 1440, true);
+        }
+        else
+        {
+            Screen.SetResolution(2560, 1440, false);
+        }
+    }
+
+    public void ChangeResolutionTo1920()
+    {
+        if (Screen.fullScreen)
+        {
+            Screen.SetResolution(1920, 1080, true);
+        }
+        else
+        {
+            Screen.SetResolution(1920, 1080, false);
+        }
+    }
+
+    public void GoWindowed()
+    {
+        Screen.fullScreen = false;
+    }
+
+    public void GoFullScreen()
+    {
+        Screen.fullScreen = true;
+    }
+
 }
