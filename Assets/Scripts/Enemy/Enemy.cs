@@ -749,4 +749,35 @@ public class Enemy : MonoBehaviour
        
     }
 
+    private void OnDisable()
+    {
+        switch (state)
+        {
+            case State.waiting:
+                // continue action
+                break;
+            case State.turning:
+                // continue action
+                break;
+            case State.exitNode:
+                // continue action
+                break;
+            case State.patrolling:
+                // continue action
+                break;
+            case State.chasing:
+                // exit chase
+                ExitChase();
+                ReturnToPatrol();
+                break;
+            case State.searching:
+                // exit search
+                ReturnToPatrol();
+                break;
+            case State.returning:
+                // return to patrol
+                ReturnToPatrol();
+                break;
+        }
+    }
 }
