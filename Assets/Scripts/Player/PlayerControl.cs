@@ -125,20 +125,45 @@ public class PlayerControl : MonoBehaviour
 
         RaycastHit hit;
         bool hitObstacle = Physics.SphereCast(transform.position, playerCollider.radius, heading, out hit, sphereCastDistance, obstacleMask);
-
+        
         if (hitObstacle)
         {
             //transform.position = hit.point;
-
-            float hitDistance = hit.distance;
+            
+            // Find direction to hit point
             Vector3 hitDirection = hit.point - transform.position;
+
+            // Dist to hit point
+            float hitDistance = hitDirection.magnitude;
+
+            // fix height floating point error
             hitDirection.y = transform.position.y;
+
+            // normalise dir
             hitDirection = hitDirection.normalized;
+
+            // move transform so the collider is (touching/As close to) the wall
             if (hitDistance > playerCollider.radius)
             {
-                transform.position += hitDirection * (hitDistance - playerCollider.radius);
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(heading), roationSpeed * Time.deltaTime);
+                transform.position = transform.position + (heading * (hitDistance - playerCollider.radius - 0.0001f));
+
+                // reassign hit values
+                // Find direction to hit point
+                hitDirection = hit.point - transform.position;
+
+                // Dist to hit point
+                hitDistance = hitDirection.magnitude;
+
+                // fix height floating point error
+                hitDirection.y = transform.position.y;
+
+                // normalise dir
+                hitDirection = hitDirection.normalized;
+
+                //transform.position += hitDirection * (hitDistance - playerCollider.radius);
+                //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(heading), roationSpeed * Time.deltaTime);
             }
+            //return;
 
             // Shoot new cast in perpindicular direction
             Vector3 secondDirection = Vector3.zero;
@@ -146,7 +171,7 @@ public class PlayerControl : MonoBehaviour
             secondDirection.y = transform.position.y;
             secondDirection.z = -hitDirection.x;
 
-            Vector3.Normalize(secondDirection);
+            secondDirection.Normalize();
 
             float dotProd = Vector3.Dot(heading, hitDirection);
             float perpDot = Vector3.Dot(heading, secondDirection);
@@ -169,22 +194,48 @@ public class PlayerControl : MonoBehaviour
             }
 
             RaycastHit secondHit;
-            bool secondHitObstacle = Physics.SphereCast(transform.position, playerCollider.radius, secondDirection, out secondHit, 1 - dotProd, obstacleMask);
+            //bool secondHitObstacle = Physics.SphereCast(transform.position, playerCollider.radius, secondDirection, out secondHit, 1 - dotProd, obstacleMask);
+            sphereCastDistance *= dotProd;
 
-            if(secondHitObstacle)
+            bool secondHitObstacle = Physics.SphereCast(transform.position, playerCollider.radius, secondDirection, out secondHit, sphereCastDistance, obstacleMask);
+
+            if (secondHitObstacle)
             {
                 // hit another wall
+                // Find direction to hit point
+                Vector3 secondHitDirection = secondHit.point - transform.position;
+
+                // Dist to hit point
+                float secondHitDistance = secondHitDirection.magnitude;
+
+                transform.position = transform.position + (secondDirection * (secondHitDistance - playerCollider.radius - 0.0001f));
             }
             else
             {
-                transform.position += secondDirection * (currentSpeed * collisionSpeedReduction) * Time.deltaTime;
+                transform.position += secondDirection * sphereCastDistance;
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(heading), roationSpeed * Time.deltaTime);
             }
 
             //cameraAxis.position = transform.position;
+            anim.speed = sphereCastDistance;
+            anim.SetFloat(animHashId, currentSpeed);
             return;
         }
 
+        AssignMovement();
+
+        //cameraAxis.position = transform.position;
+
+        anim.SetFloat(animHashId, currentSpeed);
+    }
+
+    public void SetGameManager(GameManager gameManager)
+    {
+        this.gameManager = gameManager;
+    }
+
+    void AssignMovement()
+    {
         // Update position and rotation based on the indicated transform
         switch (moveSpace)
         {
@@ -225,15 +276,6 @@ public class PlayerControl : MonoBehaviour
                 }
                 break;
         }
-
-        //cameraAxis.position = transform.position;
-
-        anim.SetFloat(animHashId, currentSpeed);
-    }
-
-    public void SetGameManager(GameManager gameManager)
-    {
-        this.gameManager = gameManager;
     }
 
     private void OnDrawGizmos()
