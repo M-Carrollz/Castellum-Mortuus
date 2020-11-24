@@ -244,6 +244,10 @@ public class Enemy : MonoBehaviour
 
     void Patrol()
     {
+        if (agent.pathPending == true)
+        {
+            return;
+        }
         // Find distance to node
         float remain = agent.remainingDistance;
 
@@ -257,7 +261,8 @@ public class Enemy : MonoBehaviour
 
     void StartPatrol()
     {
-        agent.destination = patrolNodeTransforms[currentNodeIndex].position;
+        agent.SetDestination(patrolNodeTransforms[currentNodeIndex].position);
+
         state = State.patrolling;
         StartNavigating();
     }
@@ -506,7 +511,7 @@ public class Enemy : MonoBehaviour
     void ReturnToPatrol()
     {
         // set destination once
-        agent.destination = patrolNodeTransforms[currentNodeIndex].position;
+        agent.SetDestination(patrolNodeTransforms[currentNodeIndex].position);
 
         // Reset search values
         pointOfInterest = null;
