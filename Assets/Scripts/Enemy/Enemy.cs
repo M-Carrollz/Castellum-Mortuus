@@ -240,13 +240,6 @@ public class Enemy : MonoBehaviour
         }
 
         anim.SetInteger("enemyState", (int)state);
-        AnimatorStateInfo info;
-        info = anim.GetCurrentAnimatorStateInfo(0);
-        Debug.Log(info.tagHash);
-        if ((int)state == 1)
-        {
-            int point = 0;
-        }
     }
 
     void Patrol()
@@ -751,6 +744,8 @@ public class Enemy : MonoBehaviour
 
     private void OnDisable()
     {
+        // Each state needs to consider what action to take if it is enabled again
+
         switch (state)
         {
             case State.waiting:
@@ -767,16 +762,26 @@ public class Enemy : MonoBehaviour
                 break;
             case State.chasing:
                 // exit chase
-                ExitChase();
-                ReturnToPatrol();
+                state = State.searching;
+                agent.speed = defaultSpeed;
+                searchTimer = 0f;
+
+                // Set state to return
+                state = State.returning;
+                StopMoving();
                 break;
             case State.searching:
                 // exit search
-                ReturnToPatrol();
+                // Set state to return
+                state = State.returning;
+                StopMoving();
                 break;
             case State.returning:
                 // return to patrol
-                ReturnToPatrol();
+                // Shouldn't hit this, but in the case that it does reReturn
+                // Set state to return
+                state = State.returning;
+                StopMoving();
                 break;
         }
     }
