@@ -383,6 +383,12 @@ public class Enemy : MonoBehaviour
         StartNavigating();
         state = State.chasing;
         agent.destination = lastKnownLocation;
+        if(agent.pathEndPosition != lastKnownLocation)
+        {
+            NavMeshPath newPath = new NavMeshPath();
+            NavMesh.CalculatePath(transform.position, lastKnownLocation, NavMesh.AllAreas, newPath);
+            agent.SetPath(newPath);
+        }
         agent.speed = defaultSpeed + additionalSpeed;
     }
 
