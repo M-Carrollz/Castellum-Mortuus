@@ -22,6 +22,13 @@ public class PlayerControl : MonoBehaviour
 
     [Header("Alerted values")]
     public float additionalSpeedMultiplier = 1.5f;
+    float currentSpeedMultiplier = 1f;
+    float lowestSpeedMultiplier = 1f;
+
+    public float boostSlowdown = 0.2f;
+    
+    [HideInInspector]
+    public bool boostReady = false;
 
     SphereCollider playerCollider;
     LayerMask obstacleMask;
@@ -111,14 +118,16 @@ public class PlayerControl : MonoBehaviour
             anim.SetFloat(animHashId, currentSpeed);
             return;
         }
-        float sphereCastDistance = speed;
+
+        BoostDecceleration();
+
+        float sphereCastDistance = currentSpeed;
         anim.speed = 1;
-        if(gameManager.IsEnemyAlert())
+        if(boostReady)
         {
-            velocity *= additionalSpeedMultiplier;
-            currentSpeed *= additionalSpeedMultiplier;
+            BoostSpeed();
             sphereCastDistance *= additionalSpeedMultiplier;
-            anim.speed = anim.speed * additionalSpeedMultiplier;
+            boostReady = false;
         }
 
         sphereCastDistance *= Time.deltaTime;
@@ -275,6 +284,29 @@ public class PlayerControl : MonoBehaviour
                     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(heading), roationSpeed * Time.deltaTime);
                 }
                 break;
+        }
+    }
+
+    void BoostSpeed()
+    {
+        currentSpeedMultiplier = additionalSpeedMultiplier;
+        velocity *= additionalSpeedMultiplier;
+        currentSpeed *= additionalSpeedMultiplier;
+        anim.speed = anim.speed * additionalSpeedMultiplier;
+    }
+
+    void BoostDecceleration()
+    {
+        if(currentSpeedMultiplier > lowestSpeedMultiplier)
+        {
+            currentSpeedMultiplier -= boostSlowdown * Time.deltaTime;
+            velocity *= currentSpeedMultiplier;
+            currentSpeed *= currentSpeedMultiplier;
+            anim.speed = anim.speed * currentSpeedMultiplier;
+        }
+        else
+        {
+            currentSpeedMultiplier = lowestSpeedMultiplier;
         }
     }
 

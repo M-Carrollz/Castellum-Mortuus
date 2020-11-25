@@ -176,6 +176,7 @@ public class Enemy : MonoBehaviour
             {
                 gameManager.hasCalledOut = true;
                 playCallout = true;
+                playerControl.boostReady = true;
             }
 
             
