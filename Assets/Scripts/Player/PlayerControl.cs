@@ -204,7 +204,7 @@ public class PlayerControl : MonoBehaviour
 
             RaycastHit secondHit;
             //bool secondHitObstacle = Physics.SphereCast(transform.position, playerCollider.radius, secondDirection, out secondHit, 1 - dotProd, obstacleMask);
-            sphereCastDistance *= dotProd;
+            sphereCastDistance *= 1 - dotProd;
 
             bool secondHitObstacle = Physics.SphereCast(transform.position, playerCollider.radius, secondDirection, out secondHit, sphereCastDistance, obstacleMask);
 
@@ -226,7 +226,7 @@ public class PlayerControl : MonoBehaviour
             }
 
             //cameraAxis.position = transform.position;
-            anim.speed = sphereCastDistance;
+            //anim.speed = sphereCastDistance;
             anim.SetFloat(animHashId, currentSpeed);
             return;
         }
