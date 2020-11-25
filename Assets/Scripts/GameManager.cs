@@ -122,15 +122,19 @@ public class GameManager : MonoBehaviour
         {
             case GameState.win:
                 Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
                 break;
             case GameState.lose:
                 Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
                 break;
             case GameState.paused:
                 Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
                 break;
             default:
                 Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
                 break;
 
         }
