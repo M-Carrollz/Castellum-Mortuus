@@ -240,17 +240,14 @@ public class Enemy : MonoBehaviour
         }
 
         anim.SetInteger("enemyState", (int)state);
-        AnimatorStateInfo info;
-        info = anim.GetCurrentAnimatorStateInfo(0);
-        Debug.Log(info.tagHash);
-        if ((int)state == 1)
-        {
-            int point = 0;
-        }
     }
 
     void Patrol()
     {
+        if (agent.pathPending == true)
+        {
+            return;
+        }
         // Find distance to node
         float remain = agent.remainingDistance;
 
@@ -264,7 +261,8 @@ public class Enemy : MonoBehaviour
 
     void StartPatrol()
     {
-        agent.destination = patrolNodeTransforms[currentNodeIndex].position;
+        agent.SetDestination(patrolNodeTransforms[currentNodeIndex].position);
+
         state = State.patrolling;
         StartNavigating();
     }
@@ -390,6 +388,12 @@ public class Enemy : MonoBehaviour
         StartNavigating();
         state = State.chasing;
         agent.destination = lastKnownLocation;
+        if(agent.pathEndPosition != lastKnownLocation)
+        {
+            NavMeshPath newPath = new NavMeshPath();
+            NavMesh.CalculatePath(transform.position, lastKnownLocation, NavMesh.AllAreas, newPath);
+            agent.SetPath(newPath);
+        }
         agent.speed = defaultSpeed + additionalSpeed;
     }
 
@@ -507,7 +511,7 @@ public class Enemy : MonoBehaviour
     void ReturnToPatrol()
     {
         // set destination once
-        agent.destination = patrolNodeTransforms[currentNodeIndex].position;
+        agent.SetDestination(patrolNodeTransforms[currentNodeIndex].position);
 
         // Reset search values
         pointOfInterest = null;
@@ -749,4 +753,47 @@ public class Enemy : MonoBehaviour
        
     }
 
+    private void OnDisable()
+    {
+        // Each state needs to consider what action to take if it is enabled again
+
+        switch (state)
+        {
+            case State.waiting:
+                // continue action
+                break;
+            case State.turning:
+                // continue action
+                break;
+            case State.exitNode:
+                // continue action
+                break;
+            case State.patrolling:
+                // continue action
+                break;
+            case State.chasing:
+                // exit chase
+                state = State.searching;
+                agent.speed = defaultSpeed;
+                searchTimer = 0f;
+
+                // Set state to return
+                state = State.returning;
+                StopMoving();
+                break;
+            case State.searching:
+                // exit search
+                // Set state to return
+                state = State.returning;
+                StopMoving();
+                break;
+            case State.returning:
+                // return to patrol
+                // Shouldn't hit this, but in the case that it does reReturn
+                // Set state to return
+                state = State.returning;
+                StopMoving();
+                break;
+        }
+    }
 }
