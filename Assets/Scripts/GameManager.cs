@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -148,6 +148,13 @@ public class GameManager : MonoBehaviour
     public void PlayerLose()
     {
         Debug.Log("Losing");
+        // At end of death animation, loseEvent is invoked.
+        player.anim.SetBool("isDead", true);
+        player.isDisabled = true;
+    }
+
+    public void PlayerLoseEvent()
+    {
         // player lose related things go here.
         PauseGame();
         gameState = GameState.lose;
@@ -157,13 +164,18 @@ public class GameManager : MonoBehaviour
     public void PlayerWin()
     {
         Debug.Log("winning");
+        // At end of winExit Animation, winEvent is invoked
+        player.ClimbExit();
+    }
+
+    public void PlayerWinEvent()
+    {
         // player win related things go here
         ResetCheckPoints();
         PauseGame();
         gameState = GameState.win;
         winEvent.Invoke();
     }
-
 
     public void PauseGame()
     {

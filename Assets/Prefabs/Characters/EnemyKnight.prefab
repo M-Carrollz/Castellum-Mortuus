@@ -148,7 +148,7 @@ MonoBehaviour:
   patrolNodes: []
   exitNodeWaitTime: 2
   arriveDistance: 0.5
-  additionalSpeed: 1.5
+  additionalSpeed: 3.5
   catchDistance: 0.5
   additionalRotationSpeed: 45
   searchRotateSpeed: 50
