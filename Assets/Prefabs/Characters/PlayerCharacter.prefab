@@ -71,10 +71,15 @@ MonoBehaviour:
   collisionSpeedReduction: 0.5
   heading: {x: 0, y: 0, z: 0}
   currentSpeed: 0
+  isDisabled: 0
   additionalSpeedMultiplier: 1.5
+  boostSlowdown: 0.2
+  boostReady: 0
   moveSpace: 1
   anim: {fileID: 4702019239104226494}
   moveSpeedParam: moveSpeed
+  exitPoint: {fileID: 0}
+  exitParam: lowExit
   showGizmo: 0
 --- !u!135 &7372632055239716400
 SphereCollider:
@@ -87,7 +92,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.6
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &4812481625116352807
 PrefabInstance:
