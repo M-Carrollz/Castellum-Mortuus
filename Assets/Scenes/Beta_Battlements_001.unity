@@ -6935,6 +6935,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prop_WallTorch_001 (24)
       objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -16899,6 +16914,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prop_WallTorch_001 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355357809318, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355357809318, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355357809318, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.001
+      objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -20062,6 +20107,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prop_WallTorch_001 (21)
       objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -20943,6 +21003,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Prop_WallTorch_001 (19)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
@@ -32432,6 +32507,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prop_WallTorch_001 (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -41579,6 +41669,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prop_WallTorch_001 (35)
       objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -43021,6 +43126,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Prop_WallTorch_001 (37)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
@@ -48260,6 +48380,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prop_WallTorch_001 (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -50104,6 +50239,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prop_WallTorch_001 (20)
       objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -50843,6 +50993,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Prop_WallTorch_001 (17)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
@@ -51837,6 +52002,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Prop_WallTorch_001 (39)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
@@ -55355,6 +55535,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prop_WallTorch_001 (23)
       objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -56027,6 +56222,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Prop_WallTorch_001 (33)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
@@ -59237,6 +59447,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prop_WallTorch_001 (42)
       objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -59828,6 +60053,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Prop_WallTorch_001 (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
@@ -60477,6 +60717,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Prop_WallTorch_001 (46)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
@@ -66122,6 +66377,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prop_WallTorch_001 (15)
       objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -66447,6 +66717,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Prop_WallTorch_001 (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
@@ -69466,6 +69751,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prop_WallTorch_001 (22)
       objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -70410,6 +70710,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Prop_WallTorch_001 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
@@ -80581,6 +80896,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prop_WallTorch_001 (26)
       objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -81277,6 +81607,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prop_WallTorch_001 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -81925,6 +82270,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Prop_WallTorch_001 (36)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
@@ -85658,6 +86018,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Prop_WallTorch_001 (38)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
@@ -91138,6 +91513,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prop_WallTorch_001 (44)
       objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -94543,6 +94933,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Prop_WallTorch_001 (27)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766692355146760353, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8397073824678236069, guid: 00dc2a5a81d9af647bfa8f20f9020fd7,
         type: 3}
