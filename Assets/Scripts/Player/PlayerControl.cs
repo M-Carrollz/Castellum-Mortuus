@@ -19,6 +19,7 @@ public class PlayerControl : MonoBehaviour
     public Vector3 heading = Vector3.zero;
     [HideInInspector]
     public float currentSpeed = 0f;
+    public bool isDisabled = false;
 
     [Header("Alerted values")]
     public float additionalSpeedMultiplier = 1.5f;
@@ -46,6 +47,9 @@ public class PlayerControl : MonoBehaviour
     public string moveSpeedParam = "moveSpeed";
     int animHashId = 0;
 
+    public Transform exitPoint;
+    bool hasWon = false;
+
     [Header("Gizmos")]
     public bool showGizmo = false;
 
@@ -69,37 +73,73 @@ public class PlayerControl : MonoBehaviour
         // Initialise velocity. This stops movement if there is no input.
         velocity = Vector3.zero;
 
-        // Find input values
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-
-        // Add input to velocity
-        velocity.x += horizontal;
-        velocity.z += vertical;
-
-        velocity.Normalize();
-
-        // Find heading from input values
-        if(velocity.magnitude > 0)
+        if(isDisabled)
         {
-            heading = velocity;
-            switch(moveSpace)
+            if(hasWon)
             {
-                case MoveSpace.global:
-                    {
-                        //heading = heading;
-                    }
-                    break;
-                case MoveSpace.camera:
-                    {
-                        heading = Quaternion.Euler(cameraAxis.transform.rotation.eulerAngles) * heading;
-                    }
-                    break;
-                case MoveSpace.player:
-                    {
-                        heading = Quaternion.Euler(transform.rotation.eulerAngles) * heading;
-                    }
-                    break;
+
+                Vector3 dir = exitPoint.position - transform.position;
+
+                float dist = Vector3.Distance(transform.position, exitPoint.position);
+
+                if (dist < (speed * Time.deltaTime))
+                {
+                    // Will walk into exit spot
+                    // set position and rotation in the desired exitpoint direction
+                    transform.position = exitPoint.position;
+                    transform.rotation = exitPoint.rotation;
+
+                    // play exit animation
+                    anim.SetBool("hasWon", true);
+
+                    // no longer need to enter here anymore
+                    hasWon = false;
+                    heading = transform.forward;
+                    return;
+
+                }
+                velocity = dir.normalized;
+                heading = velocity;
+            }
+            else
+            {
+                return;
+            }
+        }
+        else
+        {
+            // Find input values
+            float horizontal = Input.GetAxisRaw("Horizontal");
+            float vertical = Input.GetAxisRaw("Vertical");
+
+            // Add input to velocity
+            velocity.x += horizontal;
+            velocity.z += vertical;
+
+            velocity.Normalize();
+
+            // Find heading from input values
+            if (velocity.magnitude > 0)
+            {
+                heading = velocity;
+                switch (moveSpace)
+                {
+                    case MoveSpace.global:
+                        {
+                            //heading = heading;
+                        }
+                        break;
+                    case MoveSpace.camera:
+                        {
+                            heading = Quaternion.Euler(cameraAxis.transform.rotation.eulerAngles) * heading;
+                        }
+                        break;
+                    case MoveSpace.player:
+                        {
+                            heading = Quaternion.Euler(transform.rotation.eulerAngles) * heading;
+                        }
+                        break;
+                }
             }
         }
 
@@ -107,8 +147,6 @@ public class PlayerControl : MonoBehaviour
         velocity *= speed;
 
         currentSpeed = velocity.magnitude;
-
-       
     }
 
     private void LateUpdate()
@@ -135,7 +173,7 @@ public class PlayerControl : MonoBehaviour
         RaycastHit hit;
         bool hitObstacle = Physics.SphereCast(transform.position, playerCollider.radius, heading, out hit, sphereCastDistance, obstacleMask);
         
-        if (hitObstacle)
+        if (hitObstacle && !isDisabled)
         {
             //transform.position = hit.point;
             
@@ -243,6 +281,11 @@ public class PlayerControl : MonoBehaviour
         this.gameManager = gameManager;
     }
 
+    public GameManager GetGameManager()
+    {
+        return gameManager;
+    }
+
     void AssignMovement()
     {
         // Update position and rotation based on the indicated transform
@@ -308,6 +351,13 @@ public class PlayerControl : MonoBehaviour
         {
             currentSpeedMultiplier = lowestSpeedMultiplier;
         }
+    }
+
+    public void ClimbExit()
+    {
+        hasWon = true;
+        isDisabled = true;
+        moveSpace = MoveSpace.global;
     }
 
     private void OnDrawGizmos()

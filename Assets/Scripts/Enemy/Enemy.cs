@@ -164,8 +164,13 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (gameManager.gameState != GameManager.GameState.running)
+        {
+            return;
+        }
+
         // update lastTraversed node
-        FindClosestNodeInRadius(traversalRadius);
+            FindClosestNodeInRadius(traversalRadius);
         GetAlliesInRadius();
 
         if (IsPlayerSpotted())
@@ -227,20 +232,24 @@ public class Enemy : MonoBehaviour
 
     private void LateUpdate()
     {
-        if(gameManager.gameState == GameManager.GameState.running && IsPlayerInside())
+        if(gameManager.gameState == GameManager.GameState.running)
         {
-            gameManager.PlayerLose();
-            return;
-        }
+            if(IsPlayerInside())
+            {
+                gameManager.PlayerLose();
+                StopNavigating();
+                return;
+            }
 
-        if (playCallout)
-        {
-            playCallout = false;
-            audio.PlayOneShot(calloutClip);
-            Debug.Log("Sound");
-        }
+            if (playCallout)
+            {
+                playCallout = false;
+                audio.PlayOneShot(calloutClip);
+                Debug.Log("Sound");
+            }
 
-        anim.SetInteger("enemyState", (int)state);
+            anim.SetInteger("enemyState", (int)state);
+        }
     }
 
     void Patrol()
