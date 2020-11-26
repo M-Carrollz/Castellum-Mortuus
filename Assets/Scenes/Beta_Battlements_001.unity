@@ -3430,6 +3430,49 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 710801188}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &57751780
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 57751781}
+  - component: {fileID: 57751782}
+  m_Layer: 0
+  m_Name: ExitPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &57751781
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57751780}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -0.01, y: 0, z: -0.29}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2062064011}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &57751782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57751780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12e485e9fe7cd424e9e2687c47f57123, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &58687490
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20212,7 +20255,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &399516016
 Transform:
   m_ObjectHideFlags: 0
@@ -104846,7 +104889,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 158.37, y: 0, z: 53.79}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 57751781}
   m_Father: {fileID: 755385392}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -109482,6 +109526,16 @@ PrefabInstance:
       propertyPath: cameraAxis
       value: 
       objectReference: {fileID: 368204384}
+    - target: {fileID: 4812481624956520538, guid: 9a0b42853956c1440b0835873d30679a,
+        type: 3}
+      propertyPath: exitPoint
+      value: 
+      objectReference: {fileID: 57751781}
+    - target: {fileID: 4812481624956520538, guid: 9a0b42853956c1440b0835873d30679a,
+        type: 3}
+      propertyPath: exitParam
+      value: highExit
+      objectReference: {fileID: 0}
     - target: {fileID: 4812481624956520539, guid: 9a0b42853956c1440b0835873d30679a,
         type: 3}
       propertyPath: m_Name
