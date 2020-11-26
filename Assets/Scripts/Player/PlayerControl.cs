@@ -19,9 +19,17 @@ public class PlayerControl : MonoBehaviour
     public Vector3 heading = Vector3.zero;
     [HideInInspector]
     public float currentSpeed = 0f;
+    public bool isDisabled = false;
 
     [Header("Alerted values")]
     public float additionalSpeedMultiplier = 1.5f;
+    float currentSpeedMultiplier = 1f;
+    float lowestSpeedMultiplier = 1f;
+
+    public float boostSlowdown = 0.2f;
+    
+    [HideInInspector]
+    public bool boostReady = false;
 
     SphereCollider playerCollider;
     LayerMask obstacleMask;
@@ -38,6 +46,10 @@ public class PlayerControl : MonoBehaviour
     public Animator anim;
     public string moveSpeedParam = "moveSpeed";
     int animHashId = 0;
+
+    public Transform exitPoint;
+    bool hasWon = false;
+    public string exitParam = "lowExit";
 
     [Header("Gizmos")]
     public bool showGizmo = false;
@@ -62,37 +74,73 @@ public class PlayerControl : MonoBehaviour
         // Initialise velocity. This stops movement if there is no input.
         velocity = Vector3.zero;
 
-        // Find input values
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-
-        // Add input to velocity
-        velocity.x += horizontal;
-        velocity.z += vertical;
-
-        velocity.Normalize();
-
-        // Find heading from input values
-        if(velocity.magnitude > 0)
+        if(isDisabled)
         {
-            heading = velocity;
-            switch(moveSpace)
+            if(hasWon)
             {
-                case MoveSpace.global:
-                    {
-                        //heading = heading;
-                    }
-                    break;
-                case MoveSpace.camera:
-                    {
-                        heading = Quaternion.Euler(cameraAxis.transform.rotation.eulerAngles) * heading;
-                    }
-                    break;
-                case MoveSpace.player:
-                    {
-                        heading = Quaternion.Euler(transform.rotation.eulerAngles) * heading;
-                    }
-                    break;
+
+                Vector3 dir = exitPoint.position - transform.position;
+
+                float dist = Vector3.Distance(transform.position, exitPoint.position);
+
+                if (dist < (speed * Time.deltaTime))
+                {
+                    // Will walk into exit spot
+                    // set position and rotation in the desired exitpoint direction
+                    transform.position = exitPoint.position;
+                    transform.rotation = exitPoint.rotation;
+
+                    // play exit animation
+                    anim.SetBool(exitParam, true);
+
+                    // no longer need to enter here anymore
+                    hasWon = false;
+                    heading = transform.forward;
+                    return;
+
+                }
+                velocity = dir.normalized;
+                heading = velocity;
+            }
+            else
+            {
+                return;
+            }
+        }
+        else
+        {
+            // Find input values
+            float horizontal = Input.GetAxisRaw("Horizontal");
+            float vertical = Input.GetAxisRaw("Vertical");
+
+            // Add input to velocity
+            velocity.x += horizontal;
+            velocity.z += vertical;
+
+            velocity.Normalize();
+
+            // Find heading from input values
+            if (velocity.magnitude > 0)
+            {
+                heading = velocity;
+                switch (moveSpace)
+                {
+                    case MoveSpace.global:
+                        {
+                            //heading = heading;
+                        }
+                        break;
+                    case MoveSpace.camera:
+                        {
+                            heading = Quaternion.Euler(cameraAxis.transform.rotation.eulerAngles) * heading;
+                        }
+                        break;
+                    case MoveSpace.player:
+                        {
+                            heading = Quaternion.Euler(transform.rotation.eulerAngles) * heading;
+                        }
+                        break;
+                }
             }
         }
 
@@ -100,8 +148,6 @@ public class PlayerControl : MonoBehaviour
         velocity *= speed;
 
         currentSpeed = velocity.magnitude;
-
-       
     }
 
     private void LateUpdate()
@@ -111,14 +157,16 @@ public class PlayerControl : MonoBehaviour
             anim.SetFloat(animHashId, currentSpeed);
             return;
         }
-        float sphereCastDistance = speed;
+
+        BoostDecceleration();
+
+        float sphereCastDistance = currentSpeed;
         anim.speed = 1;
-        if(gameManager.IsEnemyAlert())
+        if(boostReady)
         {
-            velocity *= additionalSpeedMultiplier;
-            currentSpeed *= additionalSpeedMultiplier;
+            BoostSpeed();
             sphereCastDistance *= additionalSpeedMultiplier;
-            anim.speed = anim.speed * additionalSpeedMultiplier;
+            boostReady = false;
         }
 
         sphereCastDistance *= Time.deltaTime;
@@ -126,7 +174,7 @@ public class PlayerControl : MonoBehaviour
         RaycastHit hit;
         bool hitObstacle = Physics.SphereCast(transform.position, playerCollider.radius, heading, out hit, sphereCastDistance, obstacleMask);
         
-        if (hitObstacle)
+        if (hitObstacle && !isDisabled)
         {
             //transform.position = hit.point;
             
@@ -195,7 +243,7 @@ public class PlayerControl : MonoBehaviour
 
             RaycastHit secondHit;
             //bool secondHitObstacle = Physics.SphereCast(transform.position, playerCollider.radius, secondDirection, out secondHit, 1 - dotProd, obstacleMask);
-            sphereCastDistance *= dotProd;
+            sphereCastDistance *= 1 - dotProd;
 
             bool secondHitObstacle = Physics.SphereCast(transform.position, playerCollider.radius, secondDirection, out secondHit, sphereCastDistance, obstacleMask);
 
@@ -217,7 +265,7 @@ public class PlayerControl : MonoBehaviour
             }
 
             //cameraAxis.position = transform.position;
-            anim.speed = sphereCastDistance;
+            //anim.speed = sphereCastDistance;
             anim.SetFloat(animHashId, currentSpeed);
             return;
         }
@@ -232,6 +280,11 @@ public class PlayerControl : MonoBehaviour
     public void SetGameManager(GameManager gameManager)
     {
         this.gameManager = gameManager;
+    }
+
+    public GameManager GetGameManager()
+    {
+        return gameManager;
     }
 
     void AssignMovement()
@@ -276,6 +329,36 @@ public class PlayerControl : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    void BoostSpeed()
+    {
+        currentSpeedMultiplier = additionalSpeedMultiplier;
+        velocity *= additionalSpeedMultiplier;
+        currentSpeed *= additionalSpeedMultiplier;
+        anim.speed = anim.speed * additionalSpeedMultiplier;
+    }
+
+    void BoostDecceleration()
+    {
+        if(currentSpeedMultiplier > lowestSpeedMultiplier)
+        {
+            currentSpeedMultiplier -= boostSlowdown * Time.deltaTime;
+            velocity *= currentSpeedMultiplier;
+            currentSpeed *= currentSpeedMultiplier;
+            anim.speed = anim.speed * currentSpeedMultiplier;
+        }
+        else
+        {
+            currentSpeedMultiplier = lowestSpeedMultiplier;
+        }
+    }
+
+    public void ClimbExit()
+    {
+        hasWon = true;
+        isDisabled = true;
+        moveSpace = MoveSpace.global;
     }
 
     private void OnDrawGizmos()
