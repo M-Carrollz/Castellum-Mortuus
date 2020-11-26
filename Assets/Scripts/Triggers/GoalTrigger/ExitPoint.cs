@@ -20,7 +20,7 @@ public class ExitPoint : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.forward * 5f);
+        Gizmos.DrawLine(transform.position, transform.position + transform.forward * 5f);
 
         Gizmos.DrawWireSphere(transform.position, 0.6f);
     }

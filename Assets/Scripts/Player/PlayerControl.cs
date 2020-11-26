@@ -49,6 +49,7 @@ public class PlayerControl : MonoBehaviour
 
     public Transform exitPoint;
     bool hasWon = false;
+    public string exitParam = "lowExit";
 
     [Header("Gizmos")]
     public bool showGizmo = false;
@@ -90,7 +91,7 @@ public class PlayerControl : MonoBehaviour
                     transform.rotation = exitPoint.rotation;
 
                     // play exit animation
-                    anim.SetBool("hasWon", true);
+                    anim.SetBool(exitParam, true);
 
                     // no longer need to enter here anymore
                     hasWon = false;
