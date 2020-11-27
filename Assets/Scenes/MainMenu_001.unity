@@ -1742,6 +1742,7 @@ GameObject:
   m_Component:
   - component: {fileID: 760325988}
   - component: {fileID: 760325989}
+  - component: {fileID: 760325990}
   m_Layer: 5
   m_Name: MenuController
   m_TagString: Untagged
@@ -1786,6 +1787,23 @@ MonoBehaviour:
   - {fileID: 1517622228}
   - {fileID: 2094575976}
   - {fileID: 73811987}
+--- !u!114 &760325990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 760325987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 720a8c69f267f7743bb97339b4c6e98e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  masterSlider: {fileID: 1026865585}
+  musicSlider: {fileID: 400559702}
+  soundEffectSlider: {fileID: 400559702}
+  characterSlider: {fileID: 65315186}
+  ambienceSlider: {fileID: 312415361}
 --- !u!1 &844113574
 GameObject:
   m_ObjectHideFlags: 0
@@ -3895,23 +3913,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 458202089}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2094575979
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2094575976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 720a8c69f267f7743bb97339b4c6e98e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  masterSlider: {fileID: 1026865585}
-  musicSlider: {fileID: 400559702}
-  soundEffectSlider: {fileID: 400559702}
-  characterSlider: {fileID: 65315186}
-  ambienceSlider: {fileID: 312415361}
 --- !u!1 &2096928230
 GameObject:
   m_ObjectHideFlags: 0
