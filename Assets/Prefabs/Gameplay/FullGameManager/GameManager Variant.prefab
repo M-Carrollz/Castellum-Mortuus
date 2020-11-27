@@ -1149,7 +1149,17 @@ PrefabInstance:
     - target: {fileID: 6982079912354328749, guid: 1962777540e3418448d8d02f5d023634,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: QuitApp
+      value: LoadScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982079912354328749, guid: 1962777540e3418448d8d02f5d023634,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982079912354328749, guid: 1962777540e3418448d8d02f5d023634,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6982079913959877582, guid: 1962777540e3418448d8d02f5d023634,
         type: 3}
